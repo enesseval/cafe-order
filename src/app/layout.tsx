@@ -1,6 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { ThemeProvider } from "next-themes";
+import { ApllProvider } from "@/components/graphql-provider";
+import { Toaster } from "@/components/ui/toaster";
+import { ClerkProvider } from "@clerk/nextjs";
+import { trTR } from "@clerk/localizations";
 
 export const metadata: Metadata = {
    title: "Kafe Sipariş Sistemi",
@@ -15,9 +19,12 @@ export default function RootLayout({
    return (
       <html lang="en" suppressHydrationWarning={true}>
          <body className="font-poppins">
-            <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-               {children}
-            </ThemeProvider>
+            <ClerkProvider appearance={{ elements: { footer: "hidden" } }} localization={trTR}>
+               <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                  <ApllProvider>{children}</ApllProvider>
+                  <Toaster />
+               </ThemeProvider>
+            </ClerkProvider>
          </body>
       </html>
    );
