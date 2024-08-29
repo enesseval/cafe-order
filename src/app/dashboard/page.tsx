@@ -1,7 +1,5 @@
 "use client";
 
-import { UserButton } from "@clerk/nextjs";
-import { redirect } from "next/navigation";
 import React from "react";
 
 function Dashboard() {
