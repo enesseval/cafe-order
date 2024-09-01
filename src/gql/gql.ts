@@ -13,7 +13,7 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n   query getUsers {\n      users {\n         id\n         username\n         password\n         role\n      }\n   }\n": types.GetUsersDocument,
+    "mutation addTable($id: String, $table_name: String) {\n  insert_tables_one(object: {id: $id, table_name: $table_name}) {\n    id\n  }\n}\n\nmutation deleteTable($id: String) {\n  delete_tables_by_pk(id: \"\") {\n    id\n  }\n}": types.AddTableDocument,
 };
 
 /**
@@ -33,7 +33,7 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "\n   query getUsers {\n      users {\n         id\n         username\n         password\n         role\n      }\n   }\n"): (typeof documents)["\n   query getUsers {\n      users {\n         id\n         username\n         password\n         role\n      }\n   }\n"];
+export function graphql(source: "mutation addTable($id: String, $table_name: String) {\n  insert_tables_one(object: {id: $id, table_name: $table_name}) {\n    id\n  }\n}\n\nmutation deleteTable($id: String) {\n  delete_tables_by_pk(id: \"\") {\n    id\n  }\n}"): (typeof documents)["mutation addTable($id: String, $table_name: String) {\n  insert_tables_one(object: {id: $id, table_name: $table_name}) {\n    id\n  }\n}\n\nmutation deleteTable($id: String) {\n  delete_tables_by_pk(id: \"\") {\n    id\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

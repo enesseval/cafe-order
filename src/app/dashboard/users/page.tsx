@@ -1,23 +1,27 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { getAllUsers, addClerkUser } from "@/lib/clerkFunctions";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useForm } from "react-hook-form";
+import { IoClose } from "react-icons/io5";
 import { PiSpinner } from "react-icons/pi";
+import React, { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+
+import Loading from "@/components/Loading";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { getAllUsers, addClerkUser, deleteClerkUser } from "@/lib/clerkFunctions";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 function Users() {
+   const { toast } = useToast();
    const [users, setUsers] = useState<User[]>([]);
    const [dialogOpen, setDialogOpen] = useState(false);
-   const [loading, setLoading] = useState(false);
-   const { toast } = useToast();
+   const [addUserLoading, setAddUserLoading] = useState(false);
 
    const formSchema = z.object({
       username: z.string({ required_error: "Lütfen kullanıcı adı giriniz" }).min(3, { message: "Kullanıcı adı en az 3 karakter olmalı" }),
@@ -34,12 +38,13 @@ function Users() {
       },
    });
 
+   const fetchUsers = async () => {
+      const data: User[] = await getAllUsers();
+      setUsers(data);
+   };
+
    useEffect(() => {
-      const getUsers = async () => {
-         const data: User[] = await getAllUsers();
-         setUsers(data);
-      };
-      getUsers();
+      fetchUsers();
    }, []);
 
    useEffect(() => {
@@ -47,13 +52,14 @@ function Users() {
    }, [dialogOpen, form]);
 
    const handleAddUser = async (values: z.infer<typeof formSchema>) => {
-      setLoading(true);
+      setAddUserLoading(true);
       try {
          const res = await addClerkUser(values);
          if (res.success) {
             toast({
                title: "Kullanıcı başarıyla eklendi",
             });
+            await fetchUsers();
          } else {
             toast({
                title: "Kullanıcı eklenirken bir hata oluştu",
@@ -62,16 +68,40 @@ function Users() {
             });
          }
          setDialogOpen(false);
-         setLoading(false);
+         setAddUserLoading(false);
       } catch (error) {
          console.log(error);
-         setLoading(false);
+         setAddUserLoading(false);
       }
    };
 
+   const handleDeleteUser = async (user_id: string) => {
+      if (user_id !== "") {
+         try {
+            const res = await deleteClerkUser(user_id);
+            if (res.success) {
+               toast({
+                  title: "Kullanıcı başarıyla silindi",
+               });
+               await fetchUsers();
+            } else {
+               toast({
+                  title: "Kullanıcı silinirken bir hata oluştu",
+                  description: res.message,
+                  variant: "destructive",
+               });
+            }
+         } catch (error) {
+            console.log(error);
+         }
+      }
+   };
+
+   if (users.length === 0) return <Loading />;
+
    return (
       <div>
-         <div className="flex w-full p-1 justify-end">
+         <div className="flex w-full p-3 justify-end">
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                <DialogTrigger asChild>
                   <Button variant={"outline"}>Kullanıcı Ekle</Button>
@@ -101,7 +131,7 @@ function Users() {
                            render={({ field }) => (
                               <FormItem>
                                  <FormControl>
-                                    <Input placeholder="Şifre" onChange={field.onChange} />
+                                    <Input placeholder="Şifre" type="password" onChange={field.onChange} />
                                  </FormControl>
                                  <FormMessage />
                               </FormItem>
@@ -131,14 +161,41 @@ function Users() {
                            )}
                         />
                         <DialogFooter>
-                           <Button size={loading ? "icon" : "default"} variant={"outline"} type="submit">
-                              {loading ? <PiSpinner className="animate-spin w-6 h-6" /> : "Ekle"}
+                           <Button size={addUserLoading ? "icon" : "default"} variant={"outline"} type="submit">
+                              {addUserLoading ? <PiSpinner className="animate-spin w-6 h-6" /> : "Ekle"}
                            </Button>
                         </DialogFooter>
                      </form>
                   </Form>
                </DialogContent>
             </Dialog>
+         </div>
+         <div className="p-2 w-10/12 mx-auto">
+            <Table>
+               <TableHeader>
+                  <TableRow>
+                     <TableHead>Kullanıcı adı</TableHead>
+                     <TableHead>Kullanıcı rolü</TableHead>
+                  </TableRow>
+               </TableHeader>
+               <TableBody>
+                  {users.map((user) => {
+                     if (user.role !== "table") {
+                        return (
+                           <TableRow key={user.id}>
+                              <TableCell>{user.username}</TableCell>
+                              <TableCell>{user.role}</TableCell>
+                              <TableCell>
+                                 <Button onClick={() => handleDeleteUser(user.id || "")} size={"icon"} variant={"destructive"}>
+                                    <IoClose />
+                                 </Button>
+                              </TableCell>
+                           </TableRow>
+                        );
+                     }
+                  })}
+               </TableBody>
+            </Table>
          </div>
       </div>
    );

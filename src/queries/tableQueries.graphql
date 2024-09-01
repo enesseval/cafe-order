@@ -1,0 +1,18 @@
+subscription getTables {
+   tables {
+      id
+      table_name
+   }
+}
+
+mutation addTable($id: String, $table_name: String) {
+   insert_tables_one(object: { id: $id, table_name: $table_name }) {
+      id
+   }
+}
+
+mutation deleteTable($id: String) {
+   delete_tables_by_pk(id: "") {
+      id
+   }
+}

@@ -60,66 +60,66 @@ export enum Cursor_Ordering {
 /** mutation root */
 export type Mutation_Root = {
   __typename?: 'mutation_root';
-  /** delete data from the table: "users" */
-  delete_users?: Maybe<Users_Mutation_Response>;
-  /** delete single row from the table: "users" */
-  delete_users_by_pk?: Maybe<Users>;
-  /** insert data into the table: "users" */
-  insert_users?: Maybe<Users_Mutation_Response>;
-  /** insert a single row into the table: "users" */
-  insert_users_one?: Maybe<Users>;
-  /** update data of the table: "users" */
-  update_users?: Maybe<Users_Mutation_Response>;
-  /** update single row of the table: "users" */
-  update_users_by_pk?: Maybe<Users>;
-  /** update multiples rows of table: "users" */
-  update_users_many?: Maybe<Array<Maybe<Users_Mutation_Response>>>;
+  /** delete data from the table: "tables" */
+  delete_tables?: Maybe<Tables_Mutation_Response>;
+  /** delete single row from the table: "tables" */
+  delete_tables_by_pk?: Maybe<Tables>;
+  /** insert data into the table: "tables" */
+  insert_tables?: Maybe<Tables_Mutation_Response>;
+  /** insert a single row into the table: "tables" */
+  insert_tables_one?: Maybe<Tables>;
+  /** update data of the table: "tables" */
+  update_tables?: Maybe<Tables_Mutation_Response>;
+  /** update single row of the table: "tables" */
+  update_tables_by_pk?: Maybe<Tables>;
+  /** update multiples rows of table: "tables" */
+  update_tables_many?: Maybe<Array<Maybe<Tables_Mutation_Response>>>;
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_UsersArgs = {
-  where: Users_Bool_Exp;
+export type Mutation_RootDelete_TablesArgs = {
+  where: Tables_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootDelete_Users_By_PkArgs = {
+export type Mutation_RootDelete_Tables_By_PkArgs = {
   id: Scalars['String']['input'];
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_UsersArgs = {
-  objects: Array<Users_Insert_Input>;
-  on_conflict?: InputMaybe<Users_On_Conflict>;
+export type Mutation_RootInsert_TablesArgs = {
+  objects: Array<Tables_Insert_Input>;
+  on_conflict?: InputMaybe<Tables_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootInsert_Users_OneArgs = {
-  object: Users_Insert_Input;
-  on_conflict?: InputMaybe<Users_On_Conflict>;
+export type Mutation_RootInsert_Tables_OneArgs = {
+  object: Tables_Insert_Input;
+  on_conflict?: InputMaybe<Tables_On_Conflict>;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_UsersArgs = {
-  _set?: InputMaybe<Users_Set_Input>;
-  where: Users_Bool_Exp;
+export type Mutation_RootUpdate_TablesArgs = {
+  _set?: InputMaybe<Tables_Set_Input>;
+  where: Tables_Bool_Exp;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Users_By_PkArgs = {
-  _set?: InputMaybe<Users_Set_Input>;
-  pk_columns: Users_Pk_Columns_Input;
+export type Mutation_RootUpdate_Tables_By_PkArgs = {
+  _set?: InputMaybe<Tables_Set_Input>;
+  pk_columns: Tables_Pk_Columns_Input;
 };
 
 
 /** mutation root */
-export type Mutation_RootUpdate_Users_ManyArgs = {
-  updates: Array<Users_Updates>;
+export type Mutation_RootUpdate_Tables_ManyArgs = {
+  updates: Array<Tables_Updates>;
 };
 
 /** column ordering options */
@@ -140,241 +140,228 @@ export enum Order_By {
 
 export type Query_Root = {
   __typename?: 'query_root';
-  /** fetch data from the table: "users" */
-  users: Array<Users>;
-  /** fetch aggregated fields from the table: "users" */
-  users_aggregate: Users_Aggregate;
-  /** fetch data from the table: "users" using primary key columns */
-  users_by_pk?: Maybe<Users>;
+  /** fetch data from the table: "tables" */
+  tables: Array<Tables>;
+  /** fetch aggregated fields from the table: "tables" */
+  tables_aggregate: Tables_Aggregate;
+  /** fetch data from the table: "tables" using primary key columns */
+  tables_by_pk?: Maybe<Tables>;
 };
 
 
-export type Query_RootUsersArgs = {
-  distinct_on?: InputMaybe<Array<Users_Select_Column>>;
+export type Query_RootTablesArgs = {
+  distinct_on?: InputMaybe<Array<Tables_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Users_Order_By>>;
-  where?: InputMaybe<Users_Bool_Exp>;
+  order_by?: InputMaybe<Array<Tables_Order_By>>;
+  where?: InputMaybe<Tables_Bool_Exp>;
 };
 
 
-export type Query_RootUsers_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Users_Select_Column>>;
+export type Query_RootTables_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Tables_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Users_Order_By>>;
-  where?: InputMaybe<Users_Bool_Exp>;
+  order_by?: InputMaybe<Array<Tables_Order_By>>;
+  where?: InputMaybe<Tables_Bool_Exp>;
 };
 
 
-export type Query_RootUsers_By_PkArgs = {
+export type Query_RootTables_By_PkArgs = {
   id: Scalars['String']['input'];
 };
 
 export type Subscription_Root = {
   __typename?: 'subscription_root';
-  /** fetch data from the table: "users" */
-  users: Array<Users>;
-  /** fetch aggregated fields from the table: "users" */
-  users_aggregate: Users_Aggregate;
-  /** fetch data from the table: "users" using primary key columns */
-  users_by_pk?: Maybe<Users>;
-  /** fetch data from the table in a streaming manner: "users" */
-  users_stream: Array<Users>;
+  /** fetch data from the table: "tables" */
+  tables: Array<Tables>;
+  /** fetch aggregated fields from the table: "tables" */
+  tables_aggregate: Tables_Aggregate;
+  /** fetch data from the table: "tables" using primary key columns */
+  tables_by_pk?: Maybe<Tables>;
+  /** fetch data from the table in a streaming manner: "tables" */
+  tables_stream: Array<Tables>;
 };
 
 
-export type Subscription_RootUsersArgs = {
-  distinct_on?: InputMaybe<Array<Users_Select_Column>>;
+export type Subscription_RootTablesArgs = {
+  distinct_on?: InputMaybe<Array<Tables_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Users_Order_By>>;
-  where?: InputMaybe<Users_Bool_Exp>;
+  order_by?: InputMaybe<Array<Tables_Order_By>>;
+  where?: InputMaybe<Tables_Bool_Exp>;
 };
 
 
-export type Subscription_RootUsers_AggregateArgs = {
-  distinct_on?: InputMaybe<Array<Users_Select_Column>>;
+export type Subscription_RootTables_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Tables_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
   offset?: InputMaybe<Scalars['Int']['input']>;
-  order_by?: InputMaybe<Array<Users_Order_By>>;
-  where?: InputMaybe<Users_Bool_Exp>;
+  order_by?: InputMaybe<Array<Tables_Order_By>>;
+  where?: InputMaybe<Tables_Bool_Exp>;
 };
 
 
-export type Subscription_RootUsers_By_PkArgs = {
+export type Subscription_RootTables_By_PkArgs = {
   id: Scalars['String']['input'];
 };
 
 
-export type Subscription_RootUsers_StreamArgs = {
+export type Subscription_RootTables_StreamArgs = {
   batch_size: Scalars['Int']['input'];
-  cursor: Array<InputMaybe<Users_Stream_Cursor_Input>>;
-  where?: InputMaybe<Users_Bool_Exp>;
+  cursor: Array<InputMaybe<Tables_Stream_Cursor_Input>>;
+  where?: InputMaybe<Tables_Bool_Exp>;
 };
 
-/** columns and relationships of "users" */
-export type Users = {
-  __typename?: 'users';
+/** columns and relationships of "tables" */
+export type Tables = {
+  __typename?: 'tables';
   id: Scalars['String']['output'];
-  password: Scalars['String']['output'];
-  role: Scalars['String']['output'];
-  username: Scalars['String']['output'];
+  table_name: Scalars['String']['output'];
 };
 
-/** aggregated selection of "users" */
-export type Users_Aggregate = {
-  __typename?: 'users_aggregate';
-  aggregate?: Maybe<Users_Aggregate_Fields>;
-  nodes: Array<Users>;
+/** aggregated selection of "tables" */
+export type Tables_Aggregate = {
+  __typename?: 'tables_aggregate';
+  aggregate?: Maybe<Tables_Aggregate_Fields>;
+  nodes: Array<Tables>;
 };
 
-/** aggregate fields of "users" */
-export type Users_Aggregate_Fields = {
-  __typename?: 'users_aggregate_fields';
+/** aggregate fields of "tables" */
+export type Tables_Aggregate_Fields = {
+  __typename?: 'tables_aggregate_fields';
   count: Scalars['Int']['output'];
-  max?: Maybe<Users_Max_Fields>;
-  min?: Maybe<Users_Min_Fields>;
+  max?: Maybe<Tables_Max_Fields>;
+  min?: Maybe<Tables_Min_Fields>;
 };
 
 
-/** aggregate fields of "users" */
-export type Users_Aggregate_FieldsCountArgs = {
-  columns?: InputMaybe<Array<Users_Select_Column>>;
+/** aggregate fields of "tables" */
+export type Tables_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Tables_Select_Column>>;
   distinct?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-/** Boolean expression to filter rows from the table "users". All fields are combined with a logical 'AND'. */
-export type Users_Bool_Exp = {
-  _and?: InputMaybe<Array<Users_Bool_Exp>>;
-  _not?: InputMaybe<Users_Bool_Exp>;
-  _or?: InputMaybe<Array<Users_Bool_Exp>>;
+/** Boolean expression to filter rows from the table "tables". All fields are combined with a logical 'AND'. */
+export type Tables_Bool_Exp = {
+  _and?: InputMaybe<Array<Tables_Bool_Exp>>;
+  _not?: InputMaybe<Tables_Bool_Exp>;
+  _or?: InputMaybe<Array<Tables_Bool_Exp>>;
   id?: InputMaybe<String_Comparison_Exp>;
-  password?: InputMaybe<String_Comparison_Exp>;
-  role?: InputMaybe<String_Comparison_Exp>;
-  username?: InputMaybe<String_Comparison_Exp>;
+  table_name?: InputMaybe<String_Comparison_Exp>;
 };
 
-/** unique or primary key constraints on table "users" */
-export enum Users_Constraint {
+/** unique or primary key constraints on table "tables" */
+export enum Tables_Constraint {
   /** unique or primary key constraint on columns "id" */
-  UsersPkey = 'users_pkey'
+  TablesPkey = 'tables_pkey'
 }
 
-/** input type for inserting data into table "users" */
-export type Users_Insert_Input = {
+/** input type for inserting data into table "tables" */
+export type Tables_Insert_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
-  password?: InputMaybe<Scalars['String']['input']>;
-  role?: InputMaybe<Scalars['String']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
+  table_name?: InputMaybe<Scalars['String']['input']>;
 };
 
 /** aggregate max on columns */
-export type Users_Max_Fields = {
-  __typename?: 'users_max_fields';
+export type Tables_Max_Fields = {
+  __typename?: 'tables_max_fields';
   id?: Maybe<Scalars['String']['output']>;
-  password?: Maybe<Scalars['String']['output']>;
-  role?: Maybe<Scalars['String']['output']>;
-  username?: Maybe<Scalars['String']['output']>;
+  table_name?: Maybe<Scalars['String']['output']>;
 };
 
 /** aggregate min on columns */
-export type Users_Min_Fields = {
-  __typename?: 'users_min_fields';
+export type Tables_Min_Fields = {
+  __typename?: 'tables_min_fields';
   id?: Maybe<Scalars['String']['output']>;
-  password?: Maybe<Scalars['String']['output']>;
-  role?: Maybe<Scalars['String']['output']>;
-  username?: Maybe<Scalars['String']['output']>;
+  table_name?: Maybe<Scalars['String']['output']>;
 };
 
-/** response of any mutation on the table "users" */
-export type Users_Mutation_Response = {
-  __typename?: 'users_mutation_response';
+/** response of any mutation on the table "tables" */
+export type Tables_Mutation_Response = {
+  __typename?: 'tables_mutation_response';
   /** number of rows affected by the mutation */
   affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
-  returning: Array<Users>;
+  returning: Array<Tables>;
 };
 
-/** on_conflict condition type for table "users" */
-export type Users_On_Conflict = {
-  constraint: Users_Constraint;
-  update_columns?: Array<Users_Update_Column>;
-  where?: InputMaybe<Users_Bool_Exp>;
+/** on_conflict condition type for table "tables" */
+export type Tables_On_Conflict = {
+  constraint: Tables_Constraint;
+  update_columns?: Array<Tables_Update_Column>;
+  where?: InputMaybe<Tables_Bool_Exp>;
 };
 
-/** Ordering options when selecting data from "users". */
-export type Users_Order_By = {
+/** Ordering options when selecting data from "tables". */
+export type Tables_Order_By = {
   id?: InputMaybe<Order_By>;
-  password?: InputMaybe<Order_By>;
-  role?: InputMaybe<Order_By>;
-  username?: InputMaybe<Order_By>;
+  table_name?: InputMaybe<Order_By>;
 };
 
-/** primary key columns input for table: users */
-export type Users_Pk_Columns_Input = {
+/** primary key columns input for table: tables */
+export type Tables_Pk_Columns_Input = {
   id: Scalars['String']['input'];
 };
 
-/** select columns of table "users" */
-export enum Users_Select_Column {
+/** select columns of table "tables" */
+export enum Tables_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Password = 'password',
-  /** column name */
-  Role = 'role',
-  /** column name */
-  Username = 'username'
+  TableName = 'table_name'
 }
 
-/** input type for updating data in table "users" */
-export type Users_Set_Input = {
+/** input type for updating data in table "tables" */
+export type Tables_Set_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
-  password?: InputMaybe<Scalars['String']['input']>;
-  role?: InputMaybe<Scalars['String']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
+  table_name?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** Streaming cursor of the table "users" */
-export type Users_Stream_Cursor_Input = {
+/** Streaming cursor of the table "tables" */
+export type Tables_Stream_Cursor_Input = {
   /** Stream column input with initial value */
-  initial_value: Users_Stream_Cursor_Value_Input;
+  initial_value: Tables_Stream_Cursor_Value_Input;
   /** cursor ordering */
   ordering?: InputMaybe<Cursor_Ordering>;
 };
 
 /** Initial value of the column from where the streaming should start */
-export type Users_Stream_Cursor_Value_Input = {
+export type Tables_Stream_Cursor_Value_Input = {
   id?: InputMaybe<Scalars['String']['input']>;
-  password?: InputMaybe<Scalars['String']['input']>;
-  role?: InputMaybe<Scalars['String']['input']>;
-  username?: InputMaybe<Scalars['String']['input']>;
+  table_name?: InputMaybe<Scalars['String']['input']>;
 };
 
-/** update columns of table "users" */
-export enum Users_Update_Column {
+/** update columns of table "tables" */
+export enum Tables_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
-  Password = 'password',
-  /** column name */
-  Role = 'role',
-  /** column name */
-  Username = 'username'
+  TableName = 'table_name'
 }
 
-export type Users_Updates = {
+export type Tables_Updates = {
   /** sets the columns of the filtered rows to the given values */
-  _set?: InputMaybe<Users_Set_Input>;
+  _set?: InputMaybe<Tables_Set_Input>;
   /** filter the rows which have to be updated */
-  where: Users_Bool_Exp;
+  where: Tables_Bool_Exp;
 };
 
-export type GetUsersQueryVariables = Exact<{ [key: string]: never; }>;
+export type AddTableMutationVariables = Exact<{
+  id?: InputMaybe<Scalars['String']['input']>;
+  table_name?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
-export type GetUsersQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'users', id: string, username: string, password: string, role: string }> };
+export type AddTableMutation = { __typename?: 'mutation_root', insert_tables_one?: { __typename?: 'tables', id: string } | null };
+
+export type DeleteTableMutationVariables = Exact<{
+  id?: InputMaybe<Scalars['String']['input']>;
+}>;
 
 
-export const GetUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getUsers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"users"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"username"}},{"kind":"Field","name":{"kind":"Name","value":"password"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]} as unknown as DocumentNode<GetUsersQuery, GetUsersQueryVariables>;
+export type DeleteTableMutation = { __typename?: 'mutation_root', delete_tables_by_pk?: { __typename?: 'tables', id: string } | null };
+
+
+export const AddTableDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"addTable"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"table_name"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"insert_tables_one"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"object"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"table_name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"table_name"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<AddTableMutation, AddTableMutationVariables>;
+export const DeleteTableDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"deleteTable"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"delete_tables_by_pk"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"StringValue","value":"","block":false}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteTableMutation, DeleteTableMutationVariables>;
