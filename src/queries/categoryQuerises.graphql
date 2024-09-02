@@ -1,0 +1,25 @@
+subscription getCategories(order_by: {category_name: desc}) {
+   categories {
+      id
+      category_name
+      foods {
+         id
+         food_price
+         food_name
+         food_image
+         food_description
+      }
+   }
+}
+
+mutation addCategory($id: String, $category_name: String) {
+   insert_categories_one(object: { id: $id, category_name: $category_name }) {
+      id
+   }
+}
+
+mutation deleteCategory($id: String!) {
+   delete_categories_by_pk(id: $id) {
+      id
+   }
+}

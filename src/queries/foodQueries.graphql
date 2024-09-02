@@ -1,0 +1,16 @@
+subscription getFoods($where: foods_bool_exp) {
+   foods(where: $where) {
+      id
+      food_name
+      food_image
+      food_description
+      food_price
+      category_id
+   }
+}
+
+mutation addFood($id: String, $food_price: Int, $food_name: String, $food_image: String, $food_description: String, $category_id: String) {
+   insert_foods_one(object: { id: $id, food_price: $food_price, food_name: $food_name, food_image: $food_image, food_description: $food_description, category_id: $category_id }) {
+      id
+   }
+}

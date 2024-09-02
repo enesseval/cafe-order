@@ -1,3 +1,5 @@
+import { Foods } from "@/gql/graphql";
+
 type User = {
    id?: string;
    username: string | null; // `string | null` olarak güncellendi

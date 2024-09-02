@@ -5,6 +5,7 @@ import { ApllProvider } from "@/components/graphql-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ClerkProvider } from "@clerk/nextjs";
 import { trTR } from "@clerk/localizations";
+import { ShopbagProvider } from "@/components/context/ShopbagContext";
 
 export const metadata: Metadata = {
    title: "Kafe Sipariş Sistemi",
@@ -20,10 +21,12 @@ export default function RootLayout({
       <html lang="en" suppressHydrationWarning={true}>
          <body className="font-poppins">
             <ClerkProvider appearance={{ elements: { footer: "hidden" } }} localization={trTR}>
-               <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-                  <ApllProvider>{children}</ApllProvider>
-                  <Toaster />
-               </ThemeProvider>
+               <ShopbagProvider>
+                  <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+                     <ApllProvider>{children}</ApllProvider>
+                     <Toaster />
+                  </ThemeProvider>
+               </ShopbagProvider>
             </ClerkProvider>
          </body>
       </html>

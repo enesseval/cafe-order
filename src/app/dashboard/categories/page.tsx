@@ -2,52 +2,53 @@
 
 import { z } from "zod";
 import { nanoid } from "nanoid";
-import { useForm } from "react-hook-form";
 import { IoClose } from "react-icons/io5";
+import { useForm } from "react-hook-form";
 import { PiSpinner } from "react-icons/pi";
 import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useSubscription } from "@apollo/client";
 
 import Loading from "@/components/Loading";
-import type { Tables } from "@/gql/graphql";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import type { Categories } from "@/gql/graphql";
 import { useToast } from "@/components/ui/use-toast";
-import { ADD_TABLE, DELETE_TABLE, GET_ALL_TABLES } from "@/queries/queries";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
+import { ADD_CATEGORY, DELETE_CATEGORY, GET_ALL_CATEGORIES } from "@/queries/queries";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
-function Tables() {
+function Categories() {
    const { toast } = useToast();
    const [dialogOpen, setDialogOpen] = useState(false);
 
-   const { data, loading } = useSubscription(GET_ALL_TABLES);
-   const [addTable, { loading: addTableLoading }] = useMutation(ADD_TABLE, {
+   const { data, loading } = useSubscription(GET_ALL_CATEGORIES);
+   const [addCategory, { loading: addCategoryLoading }] = useMutation(ADD_CATEGORY, {
       onCompleted: () => {
          toast({
-            title: "Masa başarıyla eklendi",
+            title: "Kategori başarıyla eklendi",
          });
          setDialogOpen(false);
       },
       onError: (error) => {
          toast({
-            title: "Masa eklenirken bir hata oluştu",
+            title: "Kategori eklenirken bir hata oluştu",
             description: error.message,
             variant: "destructive",
          });
       },
    });
-   const [deleteTable] = useMutation(DELETE_TABLE, {
+   const [deleteCategory] = useMutation(DELETE_CATEGORY, {
       onCompleted: () => {
          toast({
-            title: "Masa başarıyla silindi",
+            title: "Kategori başarıyla silindi",
          });
+         setDialogOpen(false);
       },
       onError: (error) => {
          toast({
-            title: "Masa silinirken bir hata oluştu",
+            title: "Kategori silinirkne bir hata oluştu",
             description: error.message,
             variant: "destructive",
          });
@@ -55,13 +56,13 @@ function Tables() {
    });
 
    const formSchema = z.object({
-      tableName: z.string({ required_error: "Lütfen masa adı giriniz" }).min(3, { message: "Masa adı en az 3 karakter olmalı" }),
+      categoryName: z.string({ required_error: "Lütfen kategori adı giriniz" }).min(3, { message: "Kategori adı en az 3 harf içermelidir" }),
    });
 
    const form = useForm<z.infer<typeof formSchema>>({
       resolver: zodResolver(formSchema),
       defaultValues: {
-         tableName: "",
+         categoryName: "",
       },
    });
 
@@ -69,13 +70,13 @@ function Tables() {
       if (!dialogOpen) form.reset();
    }, [dialogOpen, form]);
 
-   const handleAddTable = async (values: z.infer<typeof formSchema>) => {
+   const handleAddCategory = async (values: z.infer<typeof formSchema>) => {
       const id = nanoid();
-      await addTable({ variables: { id, table_name: values.tableName } });
+      await addCategory({ variables: { id, category_name: values.categoryName } });
    };
 
-   const handleDeleteTable = async (id: string) => {
-      await deleteTable({ variables: { id } });
+   const handleDeleteCategory = async (id: string) => {
+      await deleteCategory({ variables: { id } });
    };
 
    if (loading) return <Loading />;
@@ -85,30 +86,29 @@ function Tables() {
          <div className="flex w-full p-3 justify-end">
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                <DialogTrigger asChild>
-                  <Button variant={"outline"}>Masa ekle</Button>
+                  <Button variant={"outline"}>Kategori Ekle</Button>
                </DialogTrigger>
                <DialogContent>
                   <DialogHeader>
-                     <DialogTitle>Masa ekle</DialogTitle>
-                     <DialogDescription>Masa eklemek için bilgileri doldurunuz</DialogDescription>
+                     <DialogTitle>Kategori ekle</DialogTitle>
+                     <DialogDescription>Kategori eklemek için bilgileri doldurunuz</DialogDescription>
                   </DialogHeader>
                   <Form {...form}>
-                     <form className="space-y-4" onSubmit={form.handleSubmit(handleAddTable)}>
+                     <form className="space-y-4" onSubmit={form.handleSubmit(handleAddCategory)}>
                         <FormField
                            control={form.control}
-                           name="tableName"
+                           name="categoryName"
                            render={({ field }) => (
                               <FormItem>
                                  <FormControl>
-                                    <Input placeholder="Masa adı" onChange={field.onChange} />
+                                    <Input placeholder="Kategori adı giriniz" onChange={field.onChange} />
                                  </FormControl>
-                                 <FormMessage />
                               </FormItem>
                            )}
                         />
                         <DialogFooter>
-                           <Button size={addTableLoading ? "icon" : "default"} variant={"outline"} type="submit">
-                              {addTableLoading ? <PiSpinner className="animate-spin w-6 h-6" /> : "Ekle"}
+                           <Button size={addCategoryLoading ? "icon" : "default"} variant={"outline"} type="submit">
+                              {addCategoryLoading ? <PiSpinner className="animate-spin w-6 h-6" /> : "Ekle"}
                            </Button>
                         </DialogFooter>
                      </form>
@@ -120,21 +120,21 @@ function Tables() {
             <Table>
                <TableHeader>
                   <TableRow>
-                     <TableHead>Masa adı</TableHead>
+                     <TableHead>Kategori adı</TableHead>
                   </TableRow>
                </TableHeader>
                <TableBody>
-                  {data && data.tables.length === 0 && (
+                  {data && data.categories.length === 0 && (
                      <TableRow>
                         <TableCell className="text-center">No results.</TableCell>
                      </TableRow>
                   )}
                   {data &&
-                     data.tables.map((table: Tables) => (
-                        <TableRow key={table.id}>
-                           <TableCell>{table.table_name}</TableCell>
+                     data.categories.map((category: Categories) => (
+                        <TableRow key={category.id}>
+                           <TableCell>{category.category_name}</TableCell>
                            <TableCell className="text-right">
-                              <Button variant={"destructive"} size={"icon"} onClick={() => handleDeleteTable(table.id)}>
+                              <Button variant={"destructive"} size={"icon"} onClick={() => handleDeleteCategory(category.id)}>
                                  <IoClose />
                               </Button>
                            </TableCell>
@@ -147,4 +147,4 @@ function Tables() {
    );
 }
 
-export default Tables;
+export default Categories;

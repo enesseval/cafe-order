@@ -43,8 +43,9 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
       { name: "İstatistikler", path: "/dashboard", icon: IoRadioButtonOff },
       { name: "Kullanıcılar", path: "/dashboard/users", icon: IoRadioButtonOff },
       { name: "Masalar", path: "/dashboard/tables", icon: IoRadioButtonOff },
-      { name: "Siparişler", path: "/dashboard/orders", icon: IoRadioButtonOff },
       { name: "Menü", path: "/dashboard/menu", icon: IoRadioButtonOff },
+      { name: "Kategoriler", path: "/dashboard/categories", icon: IoRadioButtonOff },
+      { name: "Siparişler", path: "/dashboard/orders", icon: IoRadioButtonOff },
    ];
 
    return (
