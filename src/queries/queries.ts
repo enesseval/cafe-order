@@ -71,6 +71,10 @@ export const GET_FOODS = gql`
          food_description
          food_price
          category_id
+         category {
+            id
+            category_name
+         }
       }
    }
 `;
@@ -78,6 +82,14 @@ export const GET_FOODS = gql`
 export const ADD_FOOD = gql`
    mutation addFood($id: String, $food_price: Int, $food_name: String, $food_image: String, $food_description: String, $category_id: String) {
       insert_foods_one(object: { id: $id, food_price: $food_price, food_name: $food_name, food_image: $food_image, food_description: $food_description, category_id: $category_id }) {
+         id
+      }
+   }
+`;
+
+export const DELETE_FOOD = gql`
+   mutation deleteFood($id: String!) {
+      delete_foods_by_pk(id: $id) {
          id
       }
    }

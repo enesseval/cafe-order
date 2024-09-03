@@ -1,8 +1,8 @@
 import type { Foods } from "@/gql/graphql";
-import React, { useState } from "react";
+import React from "react";
 import { Card, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
-import { FaPlus, FaMinus, FaM } from "react-icons/fa6";
+import { FaPlus, FaMinus } from "react-icons/fa6";
 import { useShopbag } from "./context/ShopbagContext";
 import { cn } from "@/lib/utils";
 
@@ -40,7 +40,13 @@ function FoodCard({ food }: { food: Foods }) {
                         </Button>
                      </div>
                      <div className={cn("col-span-1 border-x border-black dark:border-white", !itemInBag && "hidden")}>
-                        <p className="text-center">{totalItems}</p>
+                        <p className="text-center">
+                           {items.map((item) => {
+                              if (item.id === food.id) {
+                                 return item.quantity;
+                              }
+                           })}
+                        </p>
                      </div>
                      <div className="col-span-1">
                         <Button onClick={() => handleAddClick()} size={"icon"} variant={"ghost"}>

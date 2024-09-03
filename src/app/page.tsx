@@ -18,12 +18,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 export default function Home() {
    const router = useRouter();
    const [isMobile, setIsMobile] = useState(false);
    const [selectedTab, setSelectedTab] = useState("all");
-   const [rightPosition, setRightPosition] = useState(12);
+   const [scrolled, setScrolled] = useState(false);
    const { totalPrice, totalItems, clearBag } = useShopbag();
    const [filteredCategories, setFilteredCategories] = useState<Categories[]>([]);
 
@@ -40,8 +41,8 @@ export default function Home() {
 
    useEffect(() => {
       const handleScroll = () => {
-         if (window.scrollY >= 10) setRightPosition(2);
-         else setRightPosition(12);
+         if (window.scrollY >= 10) setScrolled(true);
+         else setScrolled(false);
       };
       window.addEventListener("scroll", handleScroll);
 
@@ -76,7 +77,7 @@ export default function Home() {
                   </Button>
                </div>
             ) : (
-               <div className={`fixed top-2 z-10 right-${rightPosition} transition-all duration-300`}>
+               <div className={cn("fixed top-2 z-10 right-12 transition-all duration-300", scrolled ? "right-2" : "right-12")}>
                   <Popover>
                      <PopoverTrigger asChild>
                         <Button variant={"outline"}>

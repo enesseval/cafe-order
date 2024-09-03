@@ -1,20 +1,23 @@
 "use client";
 
+import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
-import type { Categories } from "@/gql/graphql";
-import { ADD_FOOD, GET_ALL_CATEGORIES } from "@/queries/queries";
+import type { Categories, Foods } from "@/gql/graphql";
+import { ADD_FOOD, DELETE_FOOD, GET_ALL_CATEGORIES, GET_FOODS } from "@/queries/queries";
 import { useMutation, useSubscription } from "@apollo/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SelectValue } from "@radix-ui/react-select";
 import { nanoid } from "nanoid";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { IoClose } from "react-icons/io5";
 import { PiSpinner } from "react-icons/pi";
 import { z } from "zod";
 
@@ -22,6 +25,7 @@ function Menu() {
    const { toast } = useToast();
    const [dialogOpen, setDialogOpen] = useState(false);
 
+   const { data: foodData, loading: foodLoading } = useSubscription(GET_FOODS);
    const { data: categoriesData, loading: categoriesLoading } = useSubscription(GET_ALL_CATEGORIES);
    const [addFood, { loading: addFoodLoading }] = useMutation(ADD_FOOD, {
       onCompleted: () => {
@@ -33,6 +37,21 @@ function Menu() {
       onError: (error) => {
          toast({
             title: "Yemek eklenirken bir hata oluştu",
+            description: error.message,
+            variant: "destructive",
+         });
+      },
+   });
+   const [deleteFood] = useMutation(DELETE_FOOD, {
+      onCompleted: () => {
+         toast({
+            title: "Yemek başarıyla silindi",
+         });
+         setDialogOpen(false);
+      },
+      onError: (error) => {
+         toast({
+            title: "Yemek silinirken bir hata oluştu",
             description: error.message,
             variant: "destructive",
          });
@@ -67,6 +86,17 @@ function Menu() {
          variables: { id, food_name: values.foodName, food_image: values.foodImage, food_description: values.foodDescription, food_price: values.foodPrice, category_id: values.categoryId },
       });
    };
+
+   const handleDeleteFood = async (id: string) => {
+      deleteFood({ variables: { id } });
+   };
+
+   if (foodLoading)
+      return (
+         <div className="h-96">
+            <Loading />
+         </div>
+      );
 
    return (
       <div>
@@ -170,6 +200,53 @@ function Menu() {
                   </Form>
                </DialogContent>
             </Dialog>
+         </div>
+         <div className="w-full">
+            <Table className="w-10/12 mx-auto">
+               <TableHeader>
+                  <TableRow>
+                     <TableHead>Yemek adı</TableHead>
+                     <TableHead>Yemek açıklaması</TableHead>
+                     <TableHead>Yemek resmi</TableHead>
+                     <TableHead>Yemek fiyatı</TableHead>
+                     <TableHead>Yemek kategorisi</TableHead>
+                  </TableRow>
+               </TableHeader>
+               <TableBody>
+                  {foodData &&
+                     foodData.foods.map((food: Foods) => (
+                        <TableRow key={food.id}>
+                           <TableCell>{food.food_name}</TableCell>
+                           <TableCell>
+                              <div className="relative group inline-block">
+                                 <span>{food.food_description.length > 30 ? food.food_description.slice(0, 30) + "..." : food.food_description}</span>
+                                 {food.food_description.length > 30 && (
+                                    <div className="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-64 bg-background text-left border border-gray-300 p-3 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                                       {food.food_description}
+                                    </div>
+                                 )}
+                              </div>
+                           </TableCell>
+                           <TableCell>
+                              <div className="relative group inline-block">
+                                 <span>{food.food_image.slice(0, 20) + "..."}</span>
+                                 <div
+                                    style={{ backgroundImage: `url(${food.food_image})` }}
+                                    className="absolute left-1/2 transform -translate-x-1/2 top-full mt-2 w-64 aspect-square bg-center bg-cover bg-no-repeat bg-background text-left border border-gray-300 p-3 rounded-lg shadow-lg hidden group-hover:block transition-all duration-300 z-10"
+                                 ></div>
+                              </div>
+                           </TableCell>
+                           <TableCell>{food.food_price}</TableCell>
+                           <TableCell>{food.category.category_name}</TableCell>
+                           <TableCell className="flex items-center">
+                              <Button onClick={() => handleDeleteFood(food.id)} size={"icon"} variant={"destructive"}>
+                                 <IoClose className="w-6 h-6" />
+                              </Button>
+                           </TableCell>
+                        </TableRow>
+                     ))}
+               </TableBody>
+            </Table>
          </div>
       </div>
    );
