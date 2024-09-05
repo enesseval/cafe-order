@@ -1,5 +1,6 @@
 "use server";
 
+import { clerKFunctionsResult, User } from "@/types/types";
 import { createClerkClient } from "@clerk/backend";
 
 const clerkClient = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY });
