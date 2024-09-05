@@ -47,6 +47,10 @@ export const GET_ALL_CATEGORIES = gql`
             food_name
             food_image
             food_description
+            category {
+               id
+               category_name
+            }
          }
       }
    }

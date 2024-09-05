@@ -8,6 +8,10 @@ subscription getCategories(order_by: {category_name: desc}) {
          food_name
          food_image
          food_description
+         category {
+               id
+               category_name
+            }
       }
    }
 }

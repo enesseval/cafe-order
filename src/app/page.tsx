@@ -28,7 +28,7 @@ export default function Home() {
    const { totalPrice, totalItems, clearBag } = useShopbag();
    const [filteredCategories, setFilteredCategories] = useState<Categories[]>([]);
 
-   const { data: categoriesData, loading: categoriesLoading } = useSubscription(GET_ALL_CATEGORIES);
+   const { data: categoriesData, loading: categoriesLoading, error: categoriesError } = useSubscription(GET_ALL_CATEGORIES);
 
    useEffect(() => {
       if (categoriesData && selectedTab !== "all") {

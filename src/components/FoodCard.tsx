@@ -7,11 +7,11 @@ import { useShopbag } from "./context/ShopbagContext";
 import { cn } from "@/lib/utils";
 
 function FoodCard({ food }: { food: Foods }) {
-   const { items, addItem, removeItem, totalItems } = useShopbag();
+   const { items, addItem, removeItem } = useShopbag();
 
    const itemInBag = items.find((item) => item.id === food.id);
 
-   const handleAddClick = () => addItem({ id: food.id, name: food.food_name, image: food.food_image, price: food.food_price, quantity: 1 });
+   const handleAddClick = () => addItem({ id: food.id, name: food.food_name, category: food.category.category_name, image: food.food_image, price: food.food_price, quantity: 1 });
 
    const handleDeleteClick = () => removeItem(food.id);
 
