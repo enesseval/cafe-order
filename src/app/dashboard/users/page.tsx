@@ -7,6 +7,7 @@ import { PiSpinner } from "react-icons/pi";
 import React, { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { User } from "@/types/types";
 import Loading from "@/components/Loading";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
