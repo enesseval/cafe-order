@@ -13,7 +13,7 @@ const httpLink = createHttpLink({
 
 const wsLink = new GraphQLWsLink(
    createClient({
-      url: "ws://cafe-order.hasura.app/v1/graphql",
+      url: "wss://cafe-order.hasura.app/v1/graphql",
       connectionParams: async () => {
          return {
             headers: {
