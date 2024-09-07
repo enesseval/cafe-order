@@ -23,7 +23,7 @@ function FoodCard({ food }: { food: Foods }) {
                style={{ backgroundImage: `url(${food.food_image})`, height: "300px" }}
             >
                <CardHeader>
-                  <span className="text-lg z-10 w-fit rounded-md bg-background/50 p-2">{food.food_name}</span>
+                  <span className="text-lg z-[1] w-fit rounded-md bg-background/50 p-2">{food.food_name}</span>
                </CardHeader>
                <div className="w-full  absolute bottom-10">
                   <div className="w-10/12 mx-auto border rounded-md bg-background/75 p-1 text-center">

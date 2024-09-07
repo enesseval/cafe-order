@@ -66,13 +66,13 @@ export default function Home() {
    }, []);
 
    return (
-      <div className="relative">
+      <div className="relative mb-14">
          {totalPrice !== 0 &&
             (isMobile ? (
                <div className="w-full fixed bottom-2 flex justify-center z-10">
                   <Button className="bg-background/75" variant={"outline"} onClick={() => router.push("/payment")}>
                      <span className="text-lg font-bold">({totalPrice} ₺)</span>
-                     <p className="ml-2 text-lg">Ödemeye git</p>
+                     <p className="ml-2 text-lg z-50">Ödemeye git</p>
                      <FaAngleRight className="w-6 h-6 ml-2" />
                   </Button>
                </div>

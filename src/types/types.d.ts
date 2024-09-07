@@ -12,7 +12,7 @@ type clerKFunctionsResult = {
    message?: string;
 };
 
-type Table = {
+type Tables = {
    id: string;
    table_name: string;
 };

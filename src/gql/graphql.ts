@@ -1154,12 +1154,16 @@ export type Orders = {
   __typename?: 'orders';
   created_at: Scalars['timestamptz']['output'];
   id: Scalars['String']['output'];
+  order_description?: Maybe<Scalars['String']['output']>;
   /** An array relationship */
   order_items: Array<Order_Items>;
   /** An aggregate relationship */
   order_items_aggregate: Order_Items_Aggregate;
   order_price: Scalars['String']['output'];
+  order_table_id: Scalars['String']['output'];
   status: Scalars['String']['output'];
+  /** An object relationship */
+  table?: Maybe<Tables>;
   updated_at: Scalars['timestamptz']['output'];
 };
 
@@ -1212,10 +1216,13 @@ export type Orders_Bool_Exp = {
   _or?: InputMaybe<Array<Orders_Bool_Exp>>;
   created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
+  order_description?: InputMaybe<String_Comparison_Exp>;
   order_items?: InputMaybe<Order_Items_Bool_Exp>;
   order_items_aggregate?: InputMaybe<Order_Items_Aggregate_Bool_Exp>;
   order_price?: InputMaybe<String_Comparison_Exp>;
+  order_table_id?: InputMaybe<String_Comparison_Exp>;
   status?: InputMaybe<String_Comparison_Exp>;
+  table?: InputMaybe<Tables_Bool_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
 };
 
@@ -1229,9 +1236,12 @@ export enum Orders_Constraint {
 export type Orders_Insert_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  order_description?: InputMaybe<Scalars['String']['input']>;
   order_items?: InputMaybe<Order_Items_Arr_Rel_Insert_Input>;
   order_price?: InputMaybe<Scalars['String']['input']>;
+  order_table_id?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
+  table?: InputMaybe<Tables_Obj_Rel_Insert_Input>;
   updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
 };
 
@@ -1240,7 +1250,9 @@ export type Orders_Max_Fields = {
   __typename?: 'orders_max_fields';
   created_at?: Maybe<Scalars['timestamptz']['output']>;
   id?: Maybe<Scalars['String']['output']>;
+  order_description?: Maybe<Scalars['String']['output']>;
   order_price?: Maybe<Scalars['String']['output']>;
+  order_table_id?: Maybe<Scalars['String']['output']>;
   status?: Maybe<Scalars['String']['output']>;
   updated_at?: Maybe<Scalars['timestamptz']['output']>;
 };
@@ -1250,7 +1262,9 @@ export type Orders_Min_Fields = {
   __typename?: 'orders_min_fields';
   created_at?: Maybe<Scalars['timestamptz']['output']>;
   id?: Maybe<Scalars['String']['output']>;
+  order_description?: Maybe<Scalars['String']['output']>;
   order_price?: Maybe<Scalars['String']['output']>;
+  order_table_id?: Maybe<Scalars['String']['output']>;
   status?: Maybe<Scalars['String']['output']>;
   updated_at?: Maybe<Scalars['timestamptz']['output']>;
 };
@@ -1282,9 +1296,12 @@ export type Orders_On_Conflict = {
 export type Orders_Order_By = {
   created_at?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  order_description?: InputMaybe<Order_By>;
   order_items_aggregate?: InputMaybe<Order_Items_Aggregate_Order_By>;
   order_price?: InputMaybe<Order_By>;
+  order_table_id?: InputMaybe<Order_By>;
   status?: InputMaybe<Order_By>;
+  table?: InputMaybe<Tables_Order_By>;
   updated_at?: InputMaybe<Order_By>;
 };
 
@@ -1300,7 +1317,11 @@ export enum Orders_Select_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  OrderDescription = 'order_description',
+  /** column name */
   OrderPrice = 'order_price',
+  /** column name */
+  OrderTableId = 'order_table_id',
   /** column name */
   Status = 'status',
   /** column name */
@@ -1311,7 +1332,9 @@ export enum Orders_Select_Column {
 export type Orders_Set_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  order_description?: InputMaybe<Scalars['String']['input']>;
   order_price?: InputMaybe<Scalars['String']['input']>;
+  order_table_id?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
   updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
 };
@@ -1328,7 +1351,9 @@ export type Orders_Stream_Cursor_Input = {
 export type Orders_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  order_description?: InputMaybe<Scalars['String']['input']>;
   order_price?: InputMaybe<Scalars['String']['input']>;
+  order_table_id?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
   updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
 };
@@ -1340,7 +1365,11 @@ export enum Orders_Update_Column {
   /** column name */
   Id = 'id',
   /** column name */
+  OrderDescription = 'order_description',
+  /** column name */
   OrderPrice = 'order_price',
+  /** column name */
+  OrderTableId = 'order_table_id',
   /** column name */
   Status = 'status',
   /** column name */
@@ -1768,6 +1797,13 @@ export type Tables_Mutation_Response = {
   affected_rows: Scalars['Int']['output'];
   /** data from the rows affected by the mutation */
   returning: Array<Tables>;
+};
+
+/** input type for inserting object relation for remote table "tables" */
+export type Tables_Obj_Rel_Insert_Input = {
+  data: Tables_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Tables_On_Conflict>;
 };
 
 /** on_conflict condition type for table "tables" */

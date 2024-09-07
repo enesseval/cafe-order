@@ -102,8 +102,8 @@ export const DELETE_FOOD = gql`
 // ORDERS
 
 export const ADD_ORDER = gql`
-   mutation addOrder($id: String, $order_price: String) {
-      insert_orders_one(object: { id: $id, order_price: $order_price }) {
+   mutation addOrder($id: String, $order_price: String, $order_table_id: String, $order_description: String) {
+      insert_orders_one(object: { id: $id, order_price: $order_price, order_table_id: $order_table_id, order_description: $order_description }) {
          id
       }
    }
@@ -130,6 +130,34 @@ export const GET_ORDER = gql`
                food_image
             }
          }
+      }
+   }
+`;
+
+export const GET_KITCHEN_ORDERS = gql`
+   subscription getOrders {
+      orders(where: { _or: [{ status: { _eq: "received" } }, { status: { _eq: "preparing" } }] }) {
+         id
+         status
+         created_at
+         order_description
+         table {
+            table_name
+         }
+         order_items {
+            food_piece
+            food {
+               food_name
+            }
+         }
+      }
+   }
+`;
+
+export const UPDATE_ORDER_KITCHEN = gql`
+   mutation orderUpdateKitchen($id: String!, $status: String!) {
+      update_orders_by_pk(pk_columns: { id: $id }, _set: { status: $status }) {
+         id
       }
    }
 `;
