@@ -98,3 +98,38 @@ export const DELETE_FOOD = gql`
       }
    }
 `;
+
+// ORDERS
+
+export const ADD_ORDER = gql`
+   mutation addOrder($id: String, $order_price: String) {
+      insert_orders_one(object: { id: $id, order_price: $order_price }) {
+         id
+      }
+   }
+`;
+
+export const ADD_ORDER_ITEMS = gql`
+   mutation addOrderItems($id: String, $food_id: String, $order_id: String, $food_piece: String) {
+      insert_order_items_one(object: { id: $id, food_id: $food_id, order_id: $order_id, food_piece: $food_piece }) {
+         id
+      }
+   }
+`;
+
+export const GET_ORDER = gql`
+   subscription getOrder($id: String!) {
+      orders(where: { id: { _eq: $id } }) {
+         status
+         updated_at
+         id
+         order_items {
+            food_piece
+            food {
+               food_name
+               food_image
+            }
+         }
+      }
+   }
+`;

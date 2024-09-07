@@ -1,27 +1,34 @@
 "use client";
 
-import { useShopbag } from "@/components/context/ShopbagContext";
-import Navbar from "@/components/Navbar";
-import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { nanoid } from "nanoid";
-import React, { useEffect, useState } from "react";
-import { FaMinus, FaPlus } from "react-icons/fa";
 import { z } from "zod";
-import isCreditCard from "validator/lib/isCreditCard";
-import { formatCardNumber, formatExpiryDate, isValidCardDate } from "../../lib/cardValidateFunctions";
+import { nanoid } from "nanoid";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { useToast } from "@/components/ui/use-toast";
 import { FaSpinner } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
+import { useMutation } from "@apollo/client";
+import { FaMinus, FaPlus } from "react-icons/fa";
+import { zodResolver } from "@hookform/resolvers/zod";
+import isCreditCard from "validator/lib/isCreditCard";
+
+import Navbar from "@/components/Navbar";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
+import { ADD_ORDER, ADD_ORDER_ITEMS } from "@/queries/queries";
+import { useShopbag } from "@/components/context/ShopbagContext";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { formatCardNumber, formatExpiryDate, isValidCardDate } from "../../lib/cardValidateFunctions";
+import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 function Payment() {
+   const router = useRouter();
    const { toast } = useToast();
    const [loading, setLoading] = useState(false);
    const { items, addItem, removeItem, totalPrice } = useShopbag();
+
+   const [addOrder] = useMutation(ADD_ORDER);
+   const [addOrderItem] = useMutation(ADD_ORDER_ITEMS);
 
    const formSchema = z.object({
       fullname: z.string({ required_error: "Kart üzerindeki ismi giriniz" }).min(1, { message: "Kart üzerindeki isim zorunludur" }),
@@ -70,41 +77,36 @@ function Payment() {
       };
 
       handlePayment(data);
-      // fetch("http://localhost:3001/api/payment", {
-      //    method: "POST",
-      //    headers: {
-      //       "Content-Type": "application/json",
-      //    },
-      //    body: JSON.stringify(data),
-      // })
-      //    .then((res) => res.json())
-      //    .then((data) => {
-      //       console.log(data);
-      //       setLoading(false);
-      //       toast({
-      //          title:"Ödeme başarıyla alındı"
-      //       })
-      //    })
-      //    .catch((e) => {
-      //       console.log("Error: ", e);
-      //       setLoading(false);
-      //    });
    };
 
-   const handlePayment = async (data: any) => {
+   const handlePayment = async (paymentData: any) => {
       try {
          const response = await fetch("http://localhost:3001/api/payment", {
             method: "POST",
             headers: {
                "Content-Type": "application/json",
             },
-            body: JSON.stringify(data),
+            body: JSON.stringify(paymentData),
          });
 
          if (response.ok) {
-            toast({
-               title: "Ödeme başarılı",
-            });
+            const { data } = await addOrder({ variables: { id: paymentData.basketId, order_price: paymentData.price.toString() } });
+
+            const orderId = data.insert_orders_one.id;
+
+            if (orderId) {
+               await Promise.all(
+                  items.map((food) => {
+                     addOrderItem({ variables: { id: nanoid(), order_id: orderId, food_id: food.id, food_piece: food.quantity.toString() } });
+                  })
+               );
+
+               router.push(`/order/${orderId}`);
+
+               toast({
+                  title: "Ödeme başarılı",
+               });
+            }
          } else {
             toast({
                title: "Bir hata oluştu",
@@ -115,7 +117,7 @@ function Payment() {
       } catch (error) {
          toast({
             title: "Bir hata oluştu",
-            description: `${(error as Error).message} || "Bilinmeyen hata"}`,
+            description: (error as Error).message || "Bilinmeyen hata",
             variant: "destructive",
          });
       } finally {
@@ -126,7 +128,7 @@ function Payment() {
    return (
       <div>
          <Navbar />
-         <div className="grid gap-1 grid-cols-1 lg:grid-cols-2 w-11/12 max-w-[1100px] my-5 mx-auto">
+         <div className="grid gap-1 lg:gap-5 grid-cols-1 lg:grid-cols-2 w-11/12 max-w-[1100px] my-5 mx-auto">
             <div>
                <Table>
                   <TableHeader>
@@ -177,7 +179,7 @@ function Payment() {
                   </TableFooter>
                </Table>
             </div>
-            <div>
+            <div className="mt-5">
                <div className="my-5 border rounded-lg p-3">
                   <Form {...form}>
                      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-3">

@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  timestamptz: { input: any; output: any; }
 };
 
 /** Boolean expression to compare columns of type "Int". All fields are combined with logical 'AND'. */
@@ -249,6 +250,30 @@ export type Foods = {
   food_name: Scalars['String']['output'];
   food_price: Scalars['Int']['output'];
   id: Scalars['String']['output'];
+  /** An array relationship */
+  order_items: Array<Order_Items>;
+  /** An aggregate relationship */
+  order_items_aggregate: Order_Items_Aggregate;
+};
+
+
+/** columns and relationships of "foods" */
+export type FoodsOrder_ItemsArgs = {
+  distinct_on?: InputMaybe<Array<Order_Items_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Order_Items_Order_By>>;
+  where?: InputMaybe<Order_Items_Bool_Exp>;
+};
+
+
+/** columns and relationships of "foods" */
+export type FoodsOrder_Items_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Order_Items_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Order_Items_Order_By>>;
+  where?: InputMaybe<Order_Items_Bool_Exp>;
 };
 
 /** aggregated selection of "foods" */
@@ -337,6 +362,8 @@ export type Foods_Bool_Exp = {
   food_name?: InputMaybe<String_Comparison_Exp>;
   food_price?: InputMaybe<Int_Comparison_Exp>;
   id?: InputMaybe<String_Comparison_Exp>;
+  order_items?: InputMaybe<Order_Items_Bool_Exp>;
+  order_items_aggregate?: InputMaybe<Order_Items_Aggregate_Bool_Exp>;
 };
 
 /** unique or primary key constraints on table "foods" */
@@ -359,6 +386,7 @@ export type Foods_Insert_Input = {
   food_name?: InputMaybe<Scalars['String']['input']>;
   food_price?: InputMaybe<Scalars['Int']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
+  order_items?: InputMaybe<Order_Items_Arr_Rel_Insert_Input>;
 };
 
 /** aggregate max on columns */
@@ -412,6 +440,13 @@ export type Foods_Mutation_Response = {
   returning: Array<Foods>;
 };
 
+/** input type for inserting object relation for remote table "foods" */
+export type Foods_Obj_Rel_Insert_Input = {
+  data: Foods_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Foods_On_Conflict>;
+};
+
 /** on_conflict condition type for table "foods" */
 export type Foods_On_Conflict = {
   constraint: Foods_Constraint;
@@ -428,6 +463,7 @@ export type Foods_Order_By = {
   food_name?: InputMaybe<Order_By>;
   food_price?: InputMaybe<Order_By>;
   id?: InputMaybe<Order_By>;
+  order_items_aggregate?: InputMaybe<Order_Items_Aggregate_Order_By>;
 };
 
 /** primary key columns input for table: foods */
@@ -592,6 +628,14 @@ export type Mutation_Root = {
   delete_foods?: Maybe<Foods_Mutation_Response>;
   /** delete single row from the table: "foods" */
   delete_foods_by_pk?: Maybe<Foods>;
+  /** delete data from the table: "order_items" */
+  delete_order_items?: Maybe<Order_Items_Mutation_Response>;
+  /** delete single row from the table: "order_items" */
+  delete_order_items_by_pk?: Maybe<Order_Items>;
+  /** delete data from the table: "orders" */
+  delete_orders?: Maybe<Orders_Mutation_Response>;
+  /** delete single row from the table: "orders" */
+  delete_orders_by_pk?: Maybe<Orders>;
   /** delete data from the table: "tables" */
   delete_tables?: Maybe<Tables_Mutation_Response>;
   /** delete single row from the table: "tables" */
@@ -604,6 +648,14 @@ export type Mutation_Root = {
   insert_foods?: Maybe<Foods_Mutation_Response>;
   /** insert a single row into the table: "foods" */
   insert_foods_one?: Maybe<Foods>;
+  /** insert data into the table: "order_items" */
+  insert_order_items?: Maybe<Order_Items_Mutation_Response>;
+  /** insert a single row into the table: "order_items" */
+  insert_order_items_one?: Maybe<Order_Items>;
+  /** insert data into the table: "orders" */
+  insert_orders?: Maybe<Orders_Mutation_Response>;
+  /** insert a single row into the table: "orders" */
+  insert_orders_one?: Maybe<Orders>;
   /** insert data into the table: "tables" */
   insert_tables?: Maybe<Tables_Mutation_Response>;
   /** insert a single row into the table: "tables" */
@@ -620,6 +672,18 @@ export type Mutation_Root = {
   update_foods_by_pk?: Maybe<Foods>;
   /** update multiples rows of table: "foods" */
   update_foods_many?: Maybe<Array<Maybe<Foods_Mutation_Response>>>;
+  /** update data of the table: "order_items" */
+  update_order_items?: Maybe<Order_Items_Mutation_Response>;
+  /** update single row of the table: "order_items" */
+  update_order_items_by_pk?: Maybe<Order_Items>;
+  /** update multiples rows of table: "order_items" */
+  update_order_items_many?: Maybe<Array<Maybe<Order_Items_Mutation_Response>>>;
+  /** update data of the table: "orders" */
+  update_orders?: Maybe<Orders_Mutation_Response>;
+  /** update single row of the table: "orders" */
+  update_orders_by_pk?: Maybe<Orders>;
+  /** update multiples rows of table: "orders" */
+  update_orders_many?: Maybe<Array<Maybe<Orders_Mutation_Response>>>;
   /** update data of the table: "tables" */
   update_tables?: Maybe<Tables_Mutation_Response>;
   /** update single row of the table: "tables" */
@@ -649,6 +713,30 @@ export type Mutation_RootDelete_FoodsArgs = {
 
 /** mutation root */
 export type Mutation_RootDelete_Foods_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Order_ItemsArgs = {
+  where: Order_Items_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Order_Items_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_OrdersArgs = {
+  where: Orders_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootDelete_Orders_By_PkArgs = {
   id: Scalars['String']['input'];
 };
 
@@ -690,6 +778,34 @@ export type Mutation_RootInsert_FoodsArgs = {
 export type Mutation_RootInsert_Foods_OneArgs = {
   object: Foods_Insert_Input;
   on_conflict?: InputMaybe<Foods_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Order_ItemsArgs = {
+  objects: Array<Order_Items_Insert_Input>;
+  on_conflict?: InputMaybe<Order_Items_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Order_Items_OneArgs = {
+  object: Order_Items_Insert_Input;
+  on_conflict?: InputMaybe<Order_Items_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_OrdersArgs = {
+  objects: Array<Orders_Insert_Input>;
+  on_conflict?: InputMaybe<Orders_On_Conflict>;
+};
+
+
+/** mutation root */
+export type Mutation_RootInsert_Orders_OneArgs = {
+  object: Orders_Insert_Input;
+  on_conflict?: InputMaybe<Orders_On_Conflict>;
 };
 
 
@@ -750,6 +866,46 @@ export type Mutation_RootUpdate_Foods_ManyArgs = {
 
 
 /** mutation root */
+export type Mutation_RootUpdate_Order_ItemsArgs = {
+  _set?: InputMaybe<Order_Items_Set_Input>;
+  where: Order_Items_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Order_Items_By_PkArgs = {
+  _set?: InputMaybe<Order_Items_Set_Input>;
+  pk_columns: Order_Items_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Order_Items_ManyArgs = {
+  updates: Array<Order_Items_Updates>;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_OrdersArgs = {
+  _set?: InputMaybe<Orders_Set_Input>;
+  where: Orders_Bool_Exp;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Orders_By_PkArgs = {
+  _set?: InputMaybe<Orders_Set_Input>;
+  pk_columns: Orders_Pk_Columns_Input;
+};
+
+
+/** mutation root */
+export type Mutation_RootUpdate_Orders_ManyArgs = {
+  updates: Array<Orders_Updates>;
+};
+
+
+/** mutation root */
 export type Mutation_RootUpdate_TablesArgs = {
   _set?: InputMaybe<Tables_Set_Input>;
   where: Tables_Bool_Exp;
@@ -784,6 +940,420 @@ export enum Order_By {
   DescNullsLast = 'desc_nulls_last'
 }
 
+/** columns and relationships of "order_items" */
+export type Order_Items = {
+  __typename?: 'order_items';
+  /** An object relationship */
+  food: Foods;
+  food_id: Scalars['String']['output'];
+  food_piece?: Maybe<Scalars['String']['output']>;
+  id: Scalars['String']['output'];
+  /** An object relationship */
+  order: Orders;
+  order_id: Scalars['String']['output'];
+};
+
+/** aggregated selection of "order_items" */
+export type Order_Items_Aggregate = {
+  __typename?: 'order_items_aggregate';
+  aggregate?: Maybe<Order_Items_Aggregate_Fields>;
+  nodes: Array<Order_Items>;
+};
+
+export type Order_Items_Aggregate_Bool_Exp = {
+  count?: InputMaybe<Order_Items_Aggregate_Bool_Exp_Count>;
+};
+
+export type Order_Items_Aggregate_Bool_Exp_Count = {
+  arguments?: InputMaybe<Array<Order_Items_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+  filter?: InputMaybe<Order_Items_Bool_Exp>;
+  predicate: Int_Comparison_Exp;
+};
+
+/** aggregate fields of "order_items" */
+export type Order_Items_Aggregate_Fields = {
+  __typename?: 'order_items_aggregate_fields';
+  count: Scalars['Int']['output'];
+  max?: Maybe<Order_Items_Max_Fields>;
+  min?: Maybe<Order_Items_Min_Fields>;
+};
+
+
+/** aggregate fields of "order_items" */
+export type Order_Items_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Order_Items_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** order by aggregate values of table "order_items" */
+export type Order_Items_Aggregate_Order_By = {
+  count?: InputMaybe<Order_By>;
+  max?: InputMaybe<Order_Items_Max_Order_By>;
+  min?: InputMaybe<Order_Items_Min_Order_By>;
+};
+
+/** input type for inserting array relation for remote table "order_items" */
+export type Order_Items_Arr_Rel_Insert_Input = {
+  data: Array<Order_Items_Insert_Input>;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Order_Items_On_Conflict>;
+};
+
+/** Boolean expression to filter rows from the table "order_items". All fields are combined with a logical 'AND'. */
+export type Order_Items_Bool_Exp = {
+  _and?: InputMaybe<Array<Order_Items_Bool_Exp>>;
+  _not?: InputMaybe<Order_Items_Bool_Exp>;
+  _or?: InputMaybe<Array<Order_Items_Bool_Exp>>;
+  food?: InputMaybe<Foods_Bool_Exp>;
+  food_id?: InputMaybe<String_Comparison_Exp>;
+  food_piece?: InputMaybe<String_Comparison_Exp>;
+  id?: InputMaybe<String_Comparison_Exp>;
+  order?: InputMaybe<Orders_Bool_Exp>;
+  order_id?: InputMaybe<String_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "order_items" */
+export enum Order_Items_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  OrderItemsPkey = 'order_items_pkey'
+}
+
+/** input type for inserting data into table "order_items" */
+export type Order_Items_Insert_Input = {
+  food?: InputMaybe<Foods_Obj_Rel_Insert_Input>;
+  food_id?: InputMaybe<Scalars['String']['input']>;
+  food_piece?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  order?: InputMaybe<Orders_Obj_Rel_Insert_Input>;
+  order_id?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** aggregate max on columns */
+export type Order_Items_Max_Fields = {
+  __typename?: 'order_items_max_fields';
+  food_id?: Maybe<Scalars['String']['output']>;
+  food_piece?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  order_id?: Maybe<Scalars['String']['output']>;
+};
+
+/** order by max() on columns of table "order_items" */
+export type Order_Items_Max_Order_By = {
+  food_id?: InputMaybe<Order_By>;
+  food_piece?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
+/** aggregate min on columns */
+export type Order_Items_Min_Fields = {
+  __typename?: 'order_items_min_fields';
+  food_id?: Maybe<Scalars['String']['output']>;
+  food_piece?: Maybe<Scalars['String']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  order_id?: Maybe<Scalars['String']['output']>;
+};
+
+/** order by min() on columns of table "order_items" */
+export type Order_Items_Min_Order_By = {
+  food_id?: InputMaybe<Order_By>;
+  food_piece?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
+/** response of any mutation on the table "order_items" */
+export type Order_Items_Mutation_Response = {
+  __typename?: 'order_items_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int']['output'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Order_Items>;
+};
+
+/** on_conflict condition type for table "order_items" */
+export type Order_Items_On_Conflict = {
+  constraint: Order_Items_Constraint;
+  update_columns?: Array<Order_Items_Update_Column>;
+  where?: InputMaybe<Order_Items_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "order_items". */
+export type Order_Items_Order_By = {
+  food?: InputMaybe<Foods_Order_By>;
+  food_id?: InputMaybe<Order_By>;
+  food_piece?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  order?: InputMaybe<Orders_Order_By>;
+  order_id?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: order_items */
+export type Order_Items_Pk_Columns_Input = {
+  id: Scalars['String']['input'];
+};
+
+/** select columns of table "order_items" */
+export enum Order_Items_Select_Column {
+  /** column name */
+  FoodId = 'food_id',
+  /** column name */
+  FoodPiece = 'food_piece',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrderId = 'order_id'
+}
+
+/** input type for updating data in table "order_items" */
+export type Order_Items_Set_Input = {
+  food_id?: InputMaybe<Scalars['String']['input']>;
+  food_piece?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  order_id?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Streaming cursor of the table "order_items" */
+export type Order_Items_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Order_Items_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Order_Items_Stream_Cursor_Value_Input = {
+  food_id?: InputMaybe<Scalars['String']['input']>;
+  food_piece?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  order_id?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** update columns of table "order_items" */
+export enum Order_Items_Update_Column {
+  /** column name */
+  FoodId = 'food_id',
+  /** column name */
+  FoodPiece = 'food_piece',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrderId = 'order_id'
+}
+
+export type Order_Items_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Order_Items_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Order_Items_Bool_Exp;
+};
+
+/** columns and relationships of "orders" */
+export type Orders = {
+  __typename?: 'orders';
+  created_at: Scalars['timestamptz']['output'];
+  id: Scalars['String']['output'];
+  /** An array relationship */
+  order_items: Array<Order_Items>;
+  /** An aggregate relationship */
+  order_items_aggregate: Order_Items_Aggregate;
+  order_price: Scalars['String']['output'];
+  status: Scalars['String']['output'];
+  updated_at: Scalars['timestamptz']['output'];
+};
+
+
+/** columns and relationships of "orders" */
+export type OrdersOrder_ItemsArgs = {
+  distinct_on?: InputMaybe<Array<Order_Items_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Order_Items_Order_By>>;
+  where?: InputMaybe<Order_Items_Bool_Exp>;
+};
+
+
+/** columns and relationships of "orders" */
+export type OrdersOrder_Items_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Order_Items_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Order_Items_Order_By>>;
+  where?: InputMaybe<Order_Items_Bool_Exp>;
+};
+
+/** aggregated selection of "orders" */
+export type Orders_Aggregate = {
+  __typename?: 'orders_aggregate';
+  aggregate?: Maybe<Orders_Aggregate_Fields>;
+  nodes: Array<Orders>;
+};
+
+/** aggregate fields of "orders" */
+export type Orders_Aggregate_Fields = {
+  __typename?: 'orders_aggregate_fields';
+  count: Scalars['Int']['output'];
+  max?: Maybe<Orders_Max_Fields>;
+  min?: Maybe<Orders_Min_Fields>;
+};
+
+
+/** aggregate fields of "orders" */
+export type Orders_Aggregate_FieldsCountArgs = {
+  columns?: InputMaybe<Array<Orders_Select_Column>>;
+  distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** Boolean expression to filter rows from the table "orders". All fields are combined with a logical 'AND'. */
+export type Orders_Bool_Exp = {
+  _and?: InputMaybe<Array<Orders_Bool_Exp>>;
+  _not?: InputMaybe<Orders_Bool_Exp>;
+  _or?: InputMaybe<Array<Orders_Bool_Exp>>;
+  created_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  id?: InputMaybe<String_Comparison_Exp>;
+  order_items?: InputMaybe<Order_Items_Bool_Exp>;
+  order_items_aggregate?: InputMaybe<Order_Items_Aggregate_Bool_Exp>;
+  order_price?: InputMaybe<String_Comparison_Exp>;
+  status?: InputMaybe<String_Comparison_Exp>;
+  updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+};
+
+/** unique or primary key constraints on table "orders" */
+export enum Orders_Constraint {
+  /** unique or primary key constraint on columns "id" */
+  OrdersPkey = 'orders_pkey'
+}
+
+/** input type for inserting data into table "orders" */
+export type Orders_Insert_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  order_items?: InputMaybe<Order_Items_Arr_Rel_Insert_Input>;
+  order_price?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
+};
+
+/** aggregate max on columns */
+export type Orders_Max_Fields = {
+  __typename?: 'orders_max_fields';
+  created_at?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  order_price?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  updated_at?: Maybe<Scalars['timestamptz']['output']>;
+};
+
+/** aggregate min on columns */
+export type Orders_Min_Fields = {
+  __typename?: 'orders_min_fields';
+  created_at?: Maybe<Scalars['timestamptz']['output']>;
+  id?: Maybe<Scalars['String']['output']>;
+  order_price?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<Scalars['String']['output']>;
+  updated_at?: Maybe<Scalars['timestamptz']['output']>;
+};
+
+/** response of any mutation on the table "orders" */
+export type Orders_Mutation_Response = {
+  __typename?: 'orders_mutation_response';
+  /** number of rows affected by the mutation */
+  affected_rows: Scalars['Int']['output'];
+  /** data from the rows affected by the mutation */
+  returning: Array<Orders>;
+};
+
+/** input type for inserting object relation for remote table "orders" */
+export type Orders_Obj_Rel_Insert_Input = {
+  data: Orders_Insert_Input;
+  /** upsert condition */
+  on_conflict?: InputMaybe<Orders_On_Conflict>;
+};
+
+/** on_conflict condition type for table "orders" */
+export type Orders_On_Conflict = {
+  constraint: Orders_Constraint;
+  update_columns?: Array<Orders_Update_Column>;
+  where?: InputMaybe<Orders_Bool_Exp>;
+};
+
+/** Ordering options when selecting data from "orders". */
+export type Orders_Order_By = {
+  created_at?: InputMaybe<Order_By>;
+  id?: InputMaybe<Order_By>;
+  order_items_aggregate?: InputMaybe<Order_Items_Aggregate_Order_By>;
+  order_price?: InputMaybe<Order_By>;
+  status?: InputMaybe<Order_By>;
+  updated_at?: InputMaybe<Order_By>;
+};
+
+/** primary key columns input for table: orders */
+export type Orders_Pk_Columns_Input = {
+  id: Scalars['String']['input'];
+};
+
+/** select columns of table "orders" */
+export enum Orders_Select_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrderPrice = 'order_price',
+  /** column name */
+  Status = 'status',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+/** input type for updating data in table "orders" */
+export type Orders_Set_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  order_price?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
+};
+
+/** Streaming cursor of the table "orders" */
+export type Orders_Stream_Cursor_Input = {
+  /** Stream column input with initial value */
+  initial_value: Orders_Stream_Cursor_Value_Input;
+  /** cursor ordering */
+  ordering?: InputMaybe<Cursor_Ordering>;
+};
+
+/** Initial value of the column from where the streaming should start */
+export type Orders_Stream_Cursor_Value_Input = {
+  created_at?: InputMaybe<Scalars['timestamptz']['input']>;
+  id?: InputMaybe<Scalars['String']['input']>;
+  order_price?: InputMaybe<Scalars['String']['input']>;
+  status?: InputMaybe<Scalars['String']['input']>;
+  updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
+};
+
+/** update columns of table "orders" */
+export enum Orders_Update_Column {
+  /** column name */
+  CreatedAt = 'created_at',
+  /** column name */
+  Id = 'id',
+  /** column name */
+  OrderPrice = 'order_price',
+  /** column name */
+  Status = 'status',
+  /** column name */
+  UpdatedAt = 'updated_at'
+}
+
+export type Orders_Updates = {
+  /** sets the columns of the filtered rows to the given values */
+  _set?: InputMaybe<Orders_Set_Input>;
+  /** filter the rows which have to be updated */
+  where: Orders_Bool_Exp;
+};
+
 export type Query_Root = {
   __typename?: 'query_root';
   /** fetch data from the table: "categories" */
@@ -798,6 +1368,18 @@ export type Query_Root = {
   foods_aggregate: Foods_Aggregate;
   /** fetch data from the table: "foods" using primary key columns */
   foods_by_pk?: Maybe<Foods>;
+  /** An array relationship */
+  order_items: Array<Order_Items>;
+  /** An aggregate relationship */
+  order_items_aggregate: Order_Items_Aggregate;
+  /** fetch data from the table: "order_items" using primary key columns */
+  order_items_by_pk?: Maybe<Order_Items>;
+  /** fetch data from the table: "orders" */
+  orders: Array<Orders>;
+  /** fetch aggregated fields from the table: "orders" */
+  orders_aggregate: Orders_Aggregate;
+  /** fetch data from the table: "orders" using primary key columns */
+  orders_by_pk?: Maybe<Orders>;
   /** fetch data from the table: "tables" */
   tables: Array<Tables>;
   /** fetch aggregated fields from the table: "tables" */
@@ -853,6 +1435,52 @@ export type Query_RootFoods_By_PkArgs = {
 };
 
 
+export type Query_RootOrder_ItemsArgs = {
+  distinct_on?: InputMaybe<Array<Order_Items_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Order_Items_Order_By>>;
+  where?: InputMaybe<Order_Items_Bool_Exp>;
+};
+
+
+export type Query_RootOrder_Items_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Order_Items_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Order_Items_Order_By>>;
+  where?: InputMaybe<Order_Items_Bool_Exp>;
+};
+
+
+export type Query_RootOrder_Items_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type Query_RootOrdersArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Order_By>>;
+  where?: InputMaybe<Orders_Bool_Exp>;
+};
+
+
+export type Query_RootOrders_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Order_By>>;
+  where?: InputMaybe<Orders_Bool_Exp>;
+};
+
+
+export type Query_RootOrders_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
 export type Query_RootTablesArgs = {
   distinct_on?: InputMaybe<Array<Tables_Select_Column>>;
   limit?: InputMaybe<Scalars['Int']['input']>;
@@ -893,6 +1521,22 @@ export type Subscription_Root = {
   foods_by_pk?: Maybe<Foods>;
   /** fetch data from the table in a streaming manner: "foods" */
   foods_stream: Array<Foods>;
+  /** An array relationship */
+  order_items: Array<Order_Items>;
+  /** An aggregate relationship */
+  order_items_aggregate: Order_Items_Aggregate;
+  /** fetch data from the table: "order_items" using primary key columns */
+  order_items_by_pk?: Maybe<Order_Items>;
+  /** fetch data from the table in a streaming manner: "order_items" */
+  order_items_stream: Array<Order_Items>;
+  /** fetch data from the table: "orders" */
+  orders: Array<Orders>;
+  /** fetch aggregated fields from the table: "orders" */
+  orders_aggregate: Orders_Aggregate;
+  /** fetch data from the table: "orders" using primary key columns */
+  orders_by_pk?: Maybe<Orders>;
+  /** fetch data from the table in a streaming manner: "orders" */
+  orders_stream: Array<Orders>;
   /** fetch data from the table: "tables" */
   tables: Array<Tables>;
   /** fetch aggregated fields from the table: "tables" */
@@ -961,6 +1605,66 @@ export type Subscription_RootFoods_StreamArgs = {
   batch_size: Scalars['Int']['input'];
   cursor: Array<InputMaybe<Foods_Stream_Cursor_Input>>;
   where?: InputMaybe<Foods_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrder_ItemsArgs = {
+  distinct_on?: InputMaybe<Array<Order_Items_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Order_Items_Order_By>>;
+  where?: InputMaybe<Order_Items_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrder_Items_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Order_Items_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Order_Items_Order_By>>;
+  where?: InputMaybe<Order_Items_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrder_Items_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type Subscription_RootOrder_Items_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Order_Items_Stream_Cursor_Input>>;
+  where?: InputMaybe<Order_Items_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrdersArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Order_By>>;
+  where?: InputMaybe<Orders_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrders_AggregateArgs = {
+  distinct_on?: InputMaybe<Array<Orders_Select_Column>>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  order_by?: InputMaybe<Array<Orders_Order_By>>;
+  where?: InputMaybe<Orders_Bool_Exp>;
+};
+
+
+export type Subscription_RootOrders_By_PkArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type Subscription_RootOrders_StreamArgs = {
+  batch_size: Scalars['Int']['input'];
+  cursor: Array<InputMaybe<Orders_Stream_Cursor_Input>>;
+  where?: InputMaybe<Orders_Bool_Exp>;
 };
 
 
@@ -1125,4 +1829,17 @@ export type Tables_Updates = {
   _set?: InputMaybe<Tables_Set_Input>;
   /** filter the rows which have to be updated */
   where: Tables_Bool_Exp;
+};
+
+/** Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'. */
+export type Timestamptz_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['timestamptz']['input']>;
+  _gt?: InputMaybe<Scalars['timestamptz']['input']>;
+  _gte?: InputMaybe<Scalars['timestamptz']['input']>;
+  _in?: InputMaybe<Array<Scalars['timestamptz']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['timestamptz']['input']>;
+  _lte?: InputMaybe<Scalars['timestamptz']['input']>;
+  _neq?: InputMaybe<Scalars['timestamptz']['input']>;
+  _nin?: InputMaybe<Array<Scalars['timestamptz']['input']>>;
 };
