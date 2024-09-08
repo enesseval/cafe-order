@@ -59,6 +59,11 @@ export const ApllProvider = ({ children }: { children: ReactNode }) => {
                         return [...existing, ...incomming];
                      },
                   },
+                  orders: {
+                     merge(existing = [], incomming: any[]) {
+                        return [...existing, ...incomming];
+                     },
+                  },
                },
             },
          },

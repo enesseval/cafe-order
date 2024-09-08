@@ -134,12 +134,12 @@ export const GET_ORDER = gql`
    }
 `;
 
-export const GET_KITCHEN_ORDERS = gql`
-   subscription getOrders {
-      orders(where: { _or: [{ status: { _eq: "received" } }, { status: { _eq: "preparing" } }] }) {
+export const GET_ALL_ORDERS = gql`
+   subscription getOrders($where: orders_bool_exp) {
+      orders(where: $where) {
          id
          status
-         created_at
+         updated_at
          order_description
          table {
             table_name
@@ -147,6 +147,7 @@ export const GET_KITCHEN_ORDERS = gql`
          order_items {
             food_piece
             food {
+               id
                food_name
             }
          }
@@ -154,9 +155,9 @@ export const GET_KITCHEN_ORDERS = gql`
    }
 `;
 
-export const UPDATE_ORDER_KITCHEN = gql`
-   mutation orderUpdateKitchen($id: String!, $status: String!) {
-      update_orders_by_pk(pk_columns: { id: $id }, _set: { status: $status }) {
+export const UPDATE_ORDER = gql`
+   mutation orderUpdateKitchen($id: String!, $status: String!, $updated_at: timestamptz!) {
+      update_orders_by_pk(pk_columns: { id: $id }, _set: { status: $status, updated_at: $updated_at }) {
          id
       }
    }
