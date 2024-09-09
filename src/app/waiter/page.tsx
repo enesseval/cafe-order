@@ -1,6 +1,9 @@
 "use client";
 
-import Loading from "@/components/Loading";
+import React from "react";
+import { useUser } from "@clerk/nextjs";
+import { useMutation, useSubscription } from "@apollo/client";
+
 import {
    AlertDialog,
    AlertDialogAction,
@@ -12,17 +15,17 @@ import {
    AlertDialogTitle,
    AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useToast } from "@/components/ui/use-toast";
 import { Orders } from "@/gql/graphql";
+import Loading from "@/components/Loading";
+import { Button } from "@/components/ui/button";
 import { renderLastActivity } from "@/lib/utils";
+import Unauthorized from "@/components/Unauthorized";
+import { useToast } from "@/components/ui/use-toast";
 import { GET_ALL_ORDERS, UPDATE_ORDER } from "@/queries/queries";
-import { useMutation, useSubscription } from "@apollo/client";
-import { UserButton } from "@clerk/nextjs";
-import React from "react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 function Waiter() {
+   const user = useUser();
    const { toast } = useToast();
    const { data, loading, error } = useSubscription(GET_ALL_ORDERS, { variables: { where: { status: { _eq: "ready" } } } });
    const [updateOrder] = useMutation(UPDATE_ORDER, {
@@ -40,7 +43,7 @@ function Waiter() {
       },
    });
 
-   console.log(data);
+   if (user.isLoaded && !user.isSignedIn && !user.user) return <Unauthorized />;
 
    const handleOrderComplate = async (id: string) => {
       await updateOrder({ variables: { id, status: "delivered", updated_at: new Date() } });

@@ -1,8 +1,10 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
+import Unauthorized from "@/components/Unauthorized";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 
 import React, { useEffect, useState } from "react";
@@ -12,7 +14,7 @@ import { IoMenu, IoClose, IoRadioButtonOn, IoRadioButtonOff } from "react-icons/
 
 function DashboardLayout({ children }: { children: React.ReactNode }) {
    const router = useRouter();
-   const { user } = useUser();
+   const user = useUser();
    const pathname = usePathname();
    const [isMobile, setIsMobile] = useState(false);
    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -34,6 +36,8 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
 
       return () => window.removeEventListener("resize", handleResize);
    }, []);
+
+   if (user.isLoaded && !user.isSignedIn && !user.user) return <Unauthorized />;
 
    const toggleSidebar = () => {
       setIsSidebarOpen(!isSidebarOpen);
@@ -72,10 +76,10 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
                )}
             >
                <div className="w-10/12 mx-auto flex flex-col items-center space-y-2 p-2 border-b">
-                  {user ? (
+                  {user.user ? (
                      <>
                         <UserButton />
-                        <span className="text-center">Hoşgeldin {user?.username}</span>
+                        <span className="text-center">Hoşgeldin {user?.user?.username}</span>
                      </>
                   ) : (
                      <>

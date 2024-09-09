@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useUser } from "@clerk/nextjs";
 import { useMutation, useSubscription } from "@apollo/client";
 
 import { renderLastActivity } from "@/lib/utils";
@@ -19,11 +20,13 @@ import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
 import { Order_Items, Orders } from "@/gql/graphql";
 import { useToast } from "@/components/ui/use-toast";
+import Unauthorized from "@/components/Unauthorized";
 import { GET_ALL_ORDERS, UPDATE_ORDER } from "@/queries/queries";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 function Kitchen() {
+   const user = useUser();
    const { toast } = useToast();
    const { data, loading, error } = useSubscription(GET_ALL_ORDERS, { variables: { where: { _or: [{ status: { _eq: "received" } }, { status: { _eq: "preparing" } }] } } });
    const [updateOrder] = useMutation(UPDATE_ORDER, {
@@ -40,6 +43,8 @@ function Kitchen() {
          });
       },
    });
+
+   if (user.isLoaded && !user.isSignedIn && !user.user) return <Unauthorized />;
 
    const handleOrderReady = async (id: string, status: string) => {
       console.log(status);

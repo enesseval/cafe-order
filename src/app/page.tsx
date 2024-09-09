@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { BiShoppingBag } from "react-icons/bi";
 import { FaAngleRight } from "react-icons/fa";
 
+import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
 import Loading from "@/components/Loading";
 import FoodCard from "@/components/FoodCard";
@@ -18,7 +19,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
 
 export default function Home() {
    const router = useRouter();
