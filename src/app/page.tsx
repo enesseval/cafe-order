@@ -1,10 +1,11 @@
 "use client";
 
-import { useSubscription } from "@apollo/client";
+import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { BiShoppingBag } from "react-icons/bi";
 import { FaAngleRight } from "react-icons/fa";
+import { BiShoppingBag } from "react-icons/bi";
+import { useSubscription } from "@apollo/client";
 
 import { cn } from "@/lib/utils";
 import Navbar from "@/components/Navbar";
@@ -21,23 +22,24 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function Home() {
+   const user = useUser();
    const router = useRouter();
    const [isMobile, setIsMobile] = useState(false);
-   const [selectedTab, setSelectedTab] = useState("all");
    const [scrolled, setScrolled] = useState(false);
+   const [selectedTab, setSelectedTab] = useState("all");
    const { totalPrice, totalItems, clearBag } = useShopbag();
    const [filteredCategories, setFilteredCategories] = useState<Categories[]>([]);
 
    const { data: categoriesData, loading: categoriesLoading, error: categoriesError } = useSubscription(GET_ALL_CATEGORIES);
 
    useEffect(() => {
-      if (categoriesData && selectedTab !== "all") {
+      if (categoriesData && !categoriesError && selectedTab !== "all") {
          const filtered = categoriesData.categories.filter((cat: Categories) => cat.category_name === selectedTab);
          setFilteredCategories(filtered);
       } else if (categoriesData) {
          setFilteredCategories(categoriesData.categories);
       }
-   }, [categoriesData, selectedTab]);
+   }, [categoriesData, categoriesError, selectedTab]);
 
    useEffect(() => {
       const handleScroll = () => {
@@ -64,6 +66,19 @@ export default function Home() {
 
       return () => window.removeEventListener("resize", handleResize);
    }, []);
+
+   useEffect(() => {
+      if (user.user && user.isLoaded && user.isSignedIn) {
+         switch (user.user.publicMetadata.role) {
+            case "kitchen":
+               router.push("/kitchen");
+               break;
+            case "waiter":
+               router.push("/waiter");
+               break;
+         }
+      }
+   }, [user, router]);
 
    return (
       <div className="relative mb-14">

@@ -2,7 +2,7 @@
 
 import { z } from "zod";
 import { nanoid } from "nanoid";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaSpinner } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
@@ -11,9 +11,12 @@ import { FaMinus, FaPlus } from "react-icons/fa";
 import { zodResolver } from "@hookform/resolvers/zod";
 import isCreditCard from "validator/lib/isCreditCard";
 
+import { cn } from "@/lib/utils";
+import { Tables } from "@/types/types";
 import Navbar from "@/components/Navbar";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { ADD_ORDER, ADD_ORDER_ITEMS, GET_ALL_TABLES } from "@/queries/queries";
 import { useShopbag } from "@/components/context/ShopbagContext";
@@ -21,9 +24,6 @@ import { Form, FormControl, FormField, FormItem, FormMessage } from "@/component
 import { formatCardNumber, formatExpiryDate, isValidCardDate } from "../../lib/cardValidateFunctions";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tables } from "@/types/types";
-import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
 
 function Payment() {
    const router = useRouter();
@@ -97,18 +97,16 @@ function Payment() {
          });
 
          if (response.ok) {
-            const { data } = await addOrder({ variables: { id: paymentData.basketId, order_price: paymentData.price.toString(), order_table_id: tableId, order_description: orderDesc } });
+            await addOrder({ variables: { id: paymentData.basketId, order_price: paymentData.price.toString(), order_table_id: tableId, order_description: orderDesc } });
 
-            const orderId = data.insert_orders_one.id;
-
-            if (orderId) {
+            if (paymentData.basketId) {
                await Promise.all(
                   items.map((food) => {
-                     addOrderItem({ variables: { id: nanoid(), order_id: orderId, food_id: food.id, food_piece: food.quantity.toString() } });
+                     addOrderItem({ variables: { id: nanoid(), order_id: paymentData.basketId, food_id: food.id, food_piece: food.quantity.toString() } });
                   })
                );
 
-               router.push(`/order/${orderId}`);
+               router.push(`/order/${paymentData.basketId}`);
 
                toast({
                   title: "Ödeme başarılı",

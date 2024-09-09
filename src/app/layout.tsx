@@ -1,10 +1,11 @@
+import { ThemeProvider } from "next-themes";
+import { trTR } from "@clerk/localizations";
+
 import "./globals.css";
 import type { Metadata } from "next";
-import { ThemeProvider } from "next-themes";
-import { ApllProvider } from "@/components/graphql-provider";
+import { ClerkProvider, useUser } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/toaster";
-import { ClerkProvider } from "@clerk/nextjs";
-import { trTR } from "@clerk/localizations";
+import { Provider } from "@/components/graphql-provider";
 import { ShopbagProvider } from "@/components/context/ShopbagContext";
 
 export const metadata: Metadata = {
@@ -23,7 +24,7 @@ export default function RootLayout({
             <ClerkProvider appearance={{ elements: { footer: "hidden" } }} localization={trTR}>
                <ShopbagProvider>
                   <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-                     <ApllProvider>{children}</ApllProvider>
+                     <Provider>{children}</Provider>
                      <Toaster />
                   </ThemeProvider>
                </ShopbagProvider>

@@ -10,6 +10,7 @@ import Loading from "@/components/Loading";
 import { Order_Items } from "@/gql/graphql";
 import { Badge } from "@/components/ui/badge";
 import { GET_ORDER } from "@/queries/queries";
+import Unauthorized from "@/components/Unauthorized";
 
 function Order() {
    const { id } = useParams();
@@ -37,6 +38,8 @@ function Order() {
       return formatDistanceToNow(new Date(updated_at), { addSuffix: true, locale: tr });
    };
 
+   if (!data || data.orders.length === 0) return <Unauthorized />;
+
    return (
       <div className="mb-14">
          <Navbar />
@@ -45,7 +48,6 @@ function Order() {
                <Loading />
             </div>
          )}
-
          {data && !error && (
             <div>
                <div className="flex flex-col items-center justify-center my-5 space-y-3">
@@ -54,7 +56,7 @@ function Order() {
                </div>
                <div className="w-11/12 mx-auto border">
                   {data.orders[0].order_items.map((item: Order_Items, index: number) => (
-                     <div key={item.id} className={`grid grid-cols-3 p-2 ${index === data.orders[0].order_items.length - 1 ? "" : "border-b"}`}>
+                     <div key={`div-${item.id}`} className={`grid grid-cols-3 p-2 ${index === data.orders[0].order_items.length - 1 ? "" : "border-b"}`}>
                         <div className="aspect-square bg-contain bg-center bg-no-repeat col-span-1" style={{ backgroundImage: `url(${item.food.food_image})`, height: "100px" }} />
                         <div className="flex items-center">
                            <p className="col-span-1">{item.food.food_name}</p>

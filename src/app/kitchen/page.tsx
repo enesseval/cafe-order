@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
-import { useUser } from "@clerk/nextjs";
+import React, { useEffect } from "react";
+import { UserButton, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { useMutation, useSubscription } from "@apollo/client";
 
 import { renderLastActivity } from "@/lib/utils";
@@ -27,6 +28,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 
 function Kitchen() {
    const user = useUser();
+   const router = useRouter();
    const { toast } = useToast();
    const { data, loading, error } = useSubscription(GET_ALL_ORDERS, { variables: { where: { _or: [{ status: { _eq: "received" } }, { status: { _eq: "preparing" } }] } } });
    const [updateOrder] = useMutation(UPDATE_ORDER, {
@@ -44,6 +46,19 @@ function Kitchen() {
       },
    });
 
+   useEffect(() => {
+      if (user.user && user.isLoaded && user.isSignedIn) {
+         switch (user.user.publicMetadata.role) {
+            case "kitchen":
+               router.push("/kitchen");
+               break;
+            case "waiter":
+               router.push("/waiter");
+               break;
+         }
+      }
+   }, [user, router]);
+
    if (user.isLoaded && !user.isSignedIn && !user.user) return <Unauthorized />;
 
    const handleOrderReady = async (id: string, status: string) => {
@@ -59,6 +74,7 @@ function Kitchen() {
       <div className="w-11/12 mx-auto">
          <div className="flex justify-center my-5 border-b">
             <h1 className="text-4xl font-bold">Cafe XYZ</h1>
+            <UserButton />
          </div>
          {loading && (
             <div className="flex justify-center h-[500px]">
@@ -105,7 +121,7 @@ function Kitchen() {
                      <div className="mt-2.5 w-28">
                         {order.status === "received" ? (
                            <div>
-                              <Button variant={"ghost"} className="w-full bg-yellow-600">
+                              <Button onClick={() => handleOrderReady(order.id, order.status)} variant={"ghost"} className="w-full bg-yellow-600">
                                  Hazırla !
                               </Button>
                            </div>

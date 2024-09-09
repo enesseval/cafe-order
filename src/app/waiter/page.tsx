@@ -1,7 +1,8 @@
 "use client";
 
-import React from "react";
-import { useUser } from "@clerk/nextjs";
+import React, { useEffect } from "react";
+import { UserButton, useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { useMutation, useSubscription } from "@apollo/client";
 
 import {
@@ -26,6 +27,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 
 function Waiter() {
    const user = useUser();
+   const router = useRouter();
    const { toast } = useToast();
    const { data, loading, error } = useSubscription(GET_ALL_ORDERS, { variables: { where: { status: { _eq: "ready" } } } });
    const [updateOrder] = useMutation(UPDATE_ORDER, {
@@ -43,6 +45,19 @@ function Waiter() {
       },
    });
 
+   useEffect(() => {
+      if (user.user && user.isLoaded && user.isSignedIn) {
+         switch (user.user.publicMetadata.role) {
+            case "kitchen":
+               router.push("/kitchen");
+               break;
+            case "waiter":
+               router.push("/waiter");
+               break;
+         }
+      }
+   }, [user, router]);
+
    if (user.isLoaded && !user.isSignedIn && !user.user) return <Unauthorized />;
 
    const handleOrderComplate = async (id: string) => {
@@ -53,6 +68,7 @@ function Waiter() {
       <div className="w-11/12 mx-auto">
          <div className="flex justify-center my-5 border-b">
             <h1 className="text-4xl font-bold">Cafe XYZ</h1>
+            <UserButton />
          </div>
          {loading && (
             <div className="flex justify-center h-[500px]">
@@ -61,7 +77,7 @@ function Waiter() {
          )}
          {data && !loading && !error && <div className="flex justify-center my-10">Bekleyen sipariş: {data.orders.length}</div>}
          {data && !loading && !error && (
-            <Table>
+            <Table className="w-full md:w-6/12 md:mx-auto">
                <TableHeader>
                   <TableRow>
                      <TableHead>Masa</TableHead>
