@@ -2,11 +2,12 @@
 
 import { ReactNode } from "react";
 import { createClient } from "graphql-ws";
+import { useAuth, useUser } from "@clerk/nextjs";
 import { setContext } from "@apollo/client/link/context";
 import { getMainDefinition } from "@apollo/client/utilities";
 import { GraphQLWsLink } from "@apollo/client/link/subscriptions";
+
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache, split } from "@apollo/client";
-import { useAuth, useUser } from "@clerk/nextjs";
 
 export const Provider = ({ children }: { children: ReactNode }) => {
    const { getToken } = useAuth();

@@ -163,3 +163,11 @@ export const UPDATE_ORDER = gql`
       }
    }
 `;
+
+export const ORDER_WEEKLY_COUNT = gql`
+   subscription orderWeeklyCount($date: timestamptz!) {
+      orders(where: { updated_at: { _gte: $date } }, order_by: { updated_at: asc }) {
+         updated_at
+      }
+   }
+`;

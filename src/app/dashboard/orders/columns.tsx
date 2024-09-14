@@ -1,9 +1,10 @@
 "use client";
 
-import { renderLastActivity, renderStatusBadge } from "@/components/RenderTSXs";
-import { Orders } from "@/gql/graphql";
-import { cn } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
+
+import { cn } from "@/lib/utils";
+import { Orders } from "@/gql/graphql";
+import { renderLastActivity, renderStatusBadge } from "@/components/RenderTSXs";
 
 export const columns: ColumnDef<Orders>[] = [
    {

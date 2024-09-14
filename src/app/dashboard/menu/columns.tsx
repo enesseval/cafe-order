@@ -1,11 +1,12 @@
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
-import { Foods } from "@/gql/graphql";
-import { cn } from "@/lib/utils";
-import { DELETE_FOOD } from "@/queries/queries";
+import { IoClose } from "react-icons/io5";
 import { useMutation } from "@apollo/client";
 import { ColumnDef } from "@tanstack/react-table";
-import { IoClose } from "react-icons/io5";
+
+import { cn } from "@/lib/utils";
+import { Foods } from "@/gql/graphql";
+import { Button } from "@/components/ui/button";
+import { DELETE_FOOD } from "@/queries/queries";
+import { useToast } from "@/components/ui/use-toast";
 
 const DeleteFood: React.FC<{ row: any }> = ({ row }) => {
    const { toast } = useToast();

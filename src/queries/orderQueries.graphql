@@ -50,3 +50,9 @@ mutation orderUpdate($id: String!, $status: String!, $updated_at: timestamptz!) 
       id
    }
 }
+
+subscribe orderWeeklyCount($date:timestamptz!){
+      orders(where:{updated_at:{_gte:$date}},order_by: {updated_at: asc}){
+         updated_at
+      }
+   }
