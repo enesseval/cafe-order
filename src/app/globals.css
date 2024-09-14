@@ -69,3 +69,11 @@
       @apply bg-background text-foreground;
    }
 }
+
+.table-overflow > div:first-child {
+   overflow: unset;
+}
+
+.short:hover + .long {
+   display: block;
+}

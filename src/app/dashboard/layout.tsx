@@ -70,7 +70,7 @@ function DashboardLayout({ children }: { children: React.ReactNode }) {
          <div className="grid grid-cols-5 min-h-screen relative">
             <div
                className={cn(
-                  "col-span-5 md:col-span-1 w-full min-h-screen left-0 z-50 transition-all duration-500 ease-in-out border-r",
+                  "col-span-5 md:col-span-1 w-full min-h-screen left-0 z-50 bg-background transition-all duration-500 ease-in-out border-r",
                   !isSidebarOpen && "-left-full -z-10",
                   isMobile && "relative col-span-5 sm:col-span-2"
                )}

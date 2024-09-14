@@ -67,6 +67,11 @@ export const Provider = ({ children }: { children: ReactNode }) => {
                         return [...existing, ...incomming];
                      },
                   },
+                  foods: {
+                     merge(existing = [], incomming: any[]) {
+                        return [...existing, ...incomming];
+                     },
+                  },
                },
             },
          },

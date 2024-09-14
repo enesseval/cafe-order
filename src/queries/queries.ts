@@ -137,7 +137,7 @@ export const GET_ORDER = gql`
 
 export const GET_ALL_ORDERS = gql`
    subscription getOrders($where: orders_bool_exp) {
-      orders(where: $where) {
+      orders(where: $where, order_by: { updated_at: desc }) {
          id
          status
          updated_at

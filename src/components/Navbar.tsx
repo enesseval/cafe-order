@@ -1,8 +1,9 @@
 import React from "react";
-import ThemeSwitcher from "./ThemeSwitcher";
-import { UserButton, useUser } from "@clerk/nextjs";
-import { Button } from "./ui/button";
 import { useRouter } from "next/navigation";
+import { UserButton, useUser } from "@clerk/nextjs";
+
+import { Button } from "./ui/button";
+import ThemeSwitcher from "./ThemeSwitcher";
 
 function Navbar() {
    const user = useUser();

@@ -5,7 +5,6 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useMutation, useSubscription } from "@apollo/client";
 
-import { renderLastActivity } from "@/lib/utils";
 import {
    AlertDialog,
    AlertDialogAction,
@@ -22,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Order_Items, Orders } from "@/gql/graphql";
 import { useToast } from "@/components/ui/use-toast";
 import Unauthorized from "@/components/Unauthorized";
+import { renderLastActivity } from "@/components/RenderTSXs";
 import { GET_ALL_ORDERS, UPDATE_ORDER } from "@/queries/queries";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";

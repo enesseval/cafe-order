@@ -11,32 +11,12 @@ import { Order_Items } from "@/gql/graphql";
 import { Badge } from "@/components/ui/badge";
 import { GET_ORDER } from "@/queries/queries";
 import Unauthorized from "@/components/Unauthorized";
+import { renderLastActivity, renderStatusBadge } from "../../../components/RenderTSXs";
 
 function Order() {
    const { id } = useParams();
 
    const { data, loading, error } = useSubscription(GET_ORDER, { variables: { id } });
-
-   console.log(data);
-
-   const renderStatusBadge = (status: string) => {
-      switch (status) {
-         case "received":
-            return <Badge className="bg-blue-500 text-white">Sipariş Alındı</Badge>;
-         case "preparing":
-            return <Badge className="bg-yellow-500 text-black">Hazırlanıyor</Badge>;
-         case "ready":
-            return <Badge className="bg-green-500 text-white">Hazırlandı</Badge>;
-         case "delivered":
-            return <Badge className="bg-gray-500 text-white">Teslim Edildi</Badge>;
-         default:
-            return <Badge className="bg-red-500 text-white">Bilinmeyen Durum</Badge>;
-      }
-   };
-
-   const renderLastActivity = (updated_at: string) => {
-      return formatDistanceToNow(new Date(updated_at), { addSuffix: true, locale: tr });
-   };
 
    if (!data || data.orders.length === 0) return <Unauthorized />;
 
