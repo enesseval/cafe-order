@@ -102,7 +102,7 @@ export const DELETE_FOOD = gql`
 // ORDERS
 
 export const ADD_ORDER = gql`
-   mutation addOrder($id: String, $order_price: String, $order_table_id: String, $order_description: String) {
+   mutation addOrder($id: String, $order_price: numeric, $order_table_id: String, $order_description: String) {
       insert_orders(objects: { id: $id, order_price: $order_price, order_table_id: $order_table_id, order_description: $order_description }) {
          affected_rows
       }

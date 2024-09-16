@@ -1,5 +1,6 @@
 "use client";
 
+import PerformanceCard from "@/components/PerformanceCard";
 import Unauthorized from "@/components/Unauthorized";
 import WeeklyCard from "@/components/WeeklyCard";
 import { useUser } from "@clerk/nextjs";
@@ -28,6 +29,7 @@ function Dashboard() {
    return (
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 col-span-5">
          <WeeklyCard />
+         <PerformanceCard />
       </div>
    );
 }

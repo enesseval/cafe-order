@@ -97,7 +97,7 @@ function Payment() {
          });
 
          if (response.ok) {
-            await addOrder({ variables: { id: paymentData.basketId, order_price: paymentData.price.toString(), order_table_id: tableId, order_description: orderDesc } });
+            await addOrder({ variables: { id: paymentData.basketId, order_price: paymentData.price, order_table_id: tableId, order_description: orderDesc } });
 
             if (paymentData.basketId) {
                await Promise.all(
