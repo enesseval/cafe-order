@@ -51,8 +51,28 @@ mutation orderUpdate($id: String!, $status: String!, $updated_at: timestamptz!) 
    }
 }
 
-subscribe orderWeeklyCount($date:timestamptz!){
-      orders(where:{updated_at:{_gte:$date}},order_by: {updated_at: asc}){
-         updated_at
+subscription orderWeeklyCount($date: timestamptz!) {
+   orders(where: { updated_at: { _gte: $date } }, order_by: { updated_at: asc }) {
+      updated_at
+   }
+}
+
+subscription totalThisWeekOrdersPrice($date: timestamptz!) {
+   orders_aggregate(where: { updated_at: { _gte: $date } }) {
+      aggregate {
+         sum {
+            order_price
+         }
       }
    }
+}
+
+subscription totalTwoDateRangesTotalPrice($startDate: timestamptz!, $endDate: timestamptz!) {
+   orders_aggregate(where: { updated_at: { _gte: $startDate, _lte: $endDate } }) {
+      aggregate {
+         sum {
+            order_price
+         }
+      }
+   }
+}

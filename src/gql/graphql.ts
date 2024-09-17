@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean; }
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
+  numeric: { input: any; output: any; }
   timestamptz: { input: any; output: any; }
 };
 
@@ -887,6 +888,7 @@ export type Mutation_RootUpdate_Order_Items_ManyArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_OrdersArgs = {
+  _inc?: InputMaybe<Orders_Inc_Input>;
   _set?: InputMaybe<Orders_Set_Input>;
   where: Orders_Bool_Exp;
 };
@@ -894,6 +896,7 @@ export type Mutation_RootUpdate_OrdersArgs = {
 
 /** mutation root */
 export type Mutation_RootUpdate_Orders_By_PkArgs = {
+  _inc?: InputMaybe<Orders_Inc_Input>;
   _set?: InputMaybe<Orders_Set_Input>;
   pk_columns: Orders_Pk_Columns_Input;
 };
@@ -922,6 +925,19 @@ export type Mutation_RootUpdate_Tables_By_PkArgs = {
 /** mutation root */
 export type Mutation_RootUpdate_Tables_ManyArgs = {
   updates: Array<Tables_Updates>;
+};
+
+/** Boolean expression to compare columns of type "numeric". All fields are combined with logical 'AND'. */
+export type Numeric_Comparison_Exp = {
+  _eq?: InputMaybe<Scalars['numeric']['input']>;
+  _gt?: InputMaybe<Scalars['numeric']['input']>;
+  _gte?: InputMaybe<Scalars['numeric']['input']>;
+  _in?: InputMaybe<Array<Scalars['numeric']['input']>>;
+  _is_null?: InputMaybe<Scalars['Boolean']['input']>;
+  _lt?: InputMaybe<Scalars['numeric']['input']>;
+  _lte?: InputMaybe<Scalars['numeric']['input']>;
+  _neq?: InputMaybe<Scalars['numeric']['input']>;
+  _nin?: InputMaybe<Array<Scalars['numeric']['input']>>;
 };
 
 /** column ordering options */
@@ -1159,7 +1175,7 @@ export type Orders = {
   order_items: Array<Order_Items>;
   /** An aggregate relationship */
   order_items_aggregate: Order_Items_Aggregate;
-  order_price: Scalars['String']['output'];
+  order_price: Scalars['numeric']['output'];
   order_table_id: Scalars['String']['output'];
   status: Scalars['String']['output'];
   /** An object relationship */
@@ -1197,9 +1213,17 @@ export type Orders_Aggregate = {
 /** aggregate fields of "orders" */
 export type Orders_Aggregate_Fields = {
   __typename?: 'orders_aggregate_fields';
+  avg?: Maybe<Orders_Avg_Fields>;
   count: Scalars['Int']['output'];
   max?: Maybe<Orders_Max_Fields>;
   min?: Maybe<Orders_Min_Fields>;
+  stddev?: Maybe<Orders_Stddev_Fields>;
+  stddev_pop?: Maybe<Orders_Stddev_Pop_Fields>;
+  stddev_samp?: Maybe<Orders_Stddev_Samp_Fields>;
+  sum?: Maybe<Orders_Sum_Fields>;
+  var_pop?: Maybe<Orders_Var_Pop_Fields>;
+  var_samp?: Maybe<Orders_Var_Samp_Fields>;
+  variance?: Maybe<Orders_Variance_Fields>;
 };
 
 
@@ -1207,6 +1231,12 @@ export type Orders_Aggregate_Fields = {
 export type Orders_Aggregate_FieldsCountArgs = {
   columns?: InputMaybe<Array<Orders_Select_Column>>;
   distinct?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+/** aggregate avg on columns */
+export type Orders_Avg_Fields = {
+  __typename?: 'orders_avg_fields';
+  order_price?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Boolean expression to filter rows from the table "orders". All fields are combined with a logical 'AND'. */
@@ -1219,7 +1249,7 @@ export type Orders_Bool_Exp = {
   order_description?: InputMaybe<String_Comparison_Exp>;
   order_items?: InputMaybe<Order_Items_Bool_Exp>;
   order_items_aggregate?: InputMaybe<Order_Items_Aggregate_Bool_Exp>;
-  order_price?: InputMaybe<String_Comparison_Exp>;
+  order_price?: InputMaybe<Numeric_Comparison_Exp>;
   order_table_id?: InputMaybe<String_Comparison_Exp>;
   status?: InputMaybe<String_Comparison_Exp>;
   table?: InputMaybe<Tables_Bool_Exp>;
@@ -1232,13 +1262,18 @@ export enum Orders_Constraint {
   OrdersPkey = 'orders_pkey'
 }
 
+/** input type for incrementing numeric columns in table "orders" */
+export type Orders_Inc_Input = {
+  order_price?: InputMaybe<Scalars['numeric']['input']>;
+};
+
 /** input type for inserting data into table "orders" */
 export type Orders_Insert_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   order_description?: InputMaybe<Scalars['String']['input']>;
   order_items?: InputMaybe<Order_Items_Arr_Rel_Insert_Input>;
-  order_price?: InputMaybe<Scalars['String']['input']>;
+  order_price?: InputMaybe<Scalars['numeric']['input']>;
   order_table_id?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
   table?: InputMaybe<Tables_Obj_Rel_Insert_Input>;
@@ -1251,7 +1286,7 @@ export type Orders_Max_Fields = {
   created_at?: Maybe<Scalars['timestamptz']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   order_description?: Maybe<Scalars['String']['output']>;
-  order_price?: Maybe<Scalars['String']['output']>;
+  order_price?: Maybe<Scalars['numeric']['output']>;
   order_table_id?: Maybe<Scalars['String']['output']>;
   status?: Maybe<Scalars['String']['output']>;
   updated_at?: Maybe<Scalars['timestamptz']['output']>;
@@ -1263,7 +1298,7 @@ export type Orders_Min_Fields = {
   created_at?: Maybe<Scalars['timestamptz']['output']>;
   id?: Maybe<Scalars['String']['output']>;
   order_description?: Maybe<Scalars['String']['output']>;
-  order_price?: Maybe<Scalars['String']['output']>;
+  order_price?: Maybe<Scalars['numeric']['output']>;
   order_table_id?: Maybe<Scalars['String']['output']>;
   status?: Maybe<Scalars['String']['output']>;
   updated_at?: Maybe<Scalars['timestamptz']['output']>;
@@ -1333,10 +1368,28 @@ export type Orders_Set_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   order_description?: InputMaybe<Scalars['String']['input']>;
-  order_price?: InputMaybe<Scalars['String']['input']>;
+  order_price?: InputMaybe<Scalars['numeric']['input']>;
   order_table_id?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
   updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
+};
+
+/** aggregate stddev on columns */
+export type Orders_Stddev_Fields = {
+  __typename?: 'orders_stddev_fields';
+  order_price?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_pop on columns */
+export type Orders_Stddev_Pop_Fields = {
+  __typename?: 'orders_stddev_pop_fields';
+  order_price?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate stddev_samp on columns */
+export type Orders_Stddev_Samp_Fields = {
+  __typename?: 'orders_stddev_samp_fields';
+  order_price?: Maybe<Scalars['Float']['output']>;
 };
 
 /** Streaming cursor of the table "orders" */
@@ -1352,10 +1405,16 @@ export type Orders_Stream_Cursor_Value_Input = {
   created_at?: InputMaybe<Scalars['timestamptz']['input']>;
   id?: InputMaybe<Scalars['String']['input']>;
   order_description?: InputMaybe<Scalars['String']['input']>;
-  order_price?: InputMaybe<Scalars['String']['input']>;
+  order_price?: InputMaybe<Scalars['numeric']['input']>;
   order_table_id?: InputMaybe<Scalars['String']['input']>;
   status?: InputMaybe<Scalars['String']['input']>;
   updated_at?: InputMaybe<Scalars['timestamptz']['input']>;
+};
+
+/** aggregate sum on columns */
+export type Orders_Sum_Fields = {
+  __typename?: 'orders_sum_fields';
+  order_price?: Maybe<Scalars['numeric']['output']>;
 };
 
 /** update columns of table "orders" */
@@ -1377,10 +1436,30 @@ export enum Orders_Update_Column {
 }
 
 export type Orders_Updates = {
+  /** increments the numeric columns with given value of the filtered values */
+  _inc?: InputMaybe<Orders_Inc_Input>;
   /** sets the columns of the filtered rows to the given values */
   _set?: InputMaybe<Orders_Set_Input>;
   /** filter the rows which have to be updated */
   where: Orders_Bool_Exp;
+};
+
+/** aggregate var_pop on columns */
+export type Orders_Var_Pop_Fields = {
+  __typename?: 'orders_var_pop_fields';
+  order_price?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate var_samp on columns */
+export type Orders_Var_Samp_Fields = {
+  __typename?: 'orders_var_samp_fields';
+  order_price?: Maybe<Scalars['Float']['output']>;
+};
+
+/** aggregate variance on columns */
+export type Orders_Variance_Fields = {
+  __typename?: 'orders_variance_fields';
+  order_price?: Maybe<Scalars['Float']['output']>;
 };
 
 export type Query_Root = {

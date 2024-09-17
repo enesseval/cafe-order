@@ -4,25 +4,16 @@ import { ORDER_WEEKLY_COUNT } from "@/queries/queries";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "./ui/chart";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "./ui/card";
 
-import { format } from "date-fns";
 import { MdErrorOutline } from "react-icons/md";
 import { useSubscription } from "@apollo/client";
 import React, { useEffect, useState } from "react";
+import { eachDayOfInterval, format } from "date-fns";
 import { Bar, BarChart, Rectangle, ReferenceLine, XAxis } from "recharts";
 
 function getWeekStartDay() {
    const day = new Date();
    const calculatedDate = new Date(day.getTime() - 86400000 * 6);
    return format(calculatedDate, "yyyy-MM-dd");
-}
-
-function getWeeklyDates() {
-   const dates = [];
-   const today = new Date();
-   for (let i = 6; i >= 0; i--) {
-      dates.push(format(new Date(today.getTime() - 86400000 * i), "yyyy-MM-dd"));
-   }
-   return dates;
 }
 
 function WeeklyCard() {
@@ -33,7 +24,6 @@ function WeeklyCard() {
    useEffect(() => {
       if (data && !loading && !error) {
          const ordersMap: { [key: string]: number } = {};
-         const today = new Date().toISOString().split("T")[0];
 
          data.orders.forEach((order: Orders) => {
             const date = order.updated_at.split("T")[0];
@@ -42,12 +32,16 @@ function WeeklyCard() {
             else ordersMap[date] = 1;
          });
 
-         const weekDates = getWeeklyDates();
-         const finalWeeklyData = weekDates.map((date) => {
-            return { date: date, count: ordersMap[date] || 0 };
-         });
+         const finalData = eachDayOfInterval({
+            start: new Date(),
+            end: getWeekStartDay(),
+         })
+            .reverse()
+            .map((date) => {
+               return { date: format(date, "yyyy-MM-dd"), count: ordersMap[format(date, "yyyy-MM-dd")] || 0 };
+            });
 
-         setWeeklyOrders(finalWeeklyData);
+         setWeeklyOrders(finalData);
       }
    }, [data, loading, error]);
 

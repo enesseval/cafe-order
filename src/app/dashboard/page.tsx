@@ -27,7 +27,7 @@ function Dashboard() {
    if (user.isLoaded && !user.isSignedIn && !user.user) return <Unauthorized />;
 
    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 col-span-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 col-span-5 gap-1 p-3">
          <WeeklyCard />
          <PerformanceCard />
       </div>

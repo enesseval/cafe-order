@@ -171,3 +171,27 @@ export const ORDER_WEEKLY_COUNT = gql`
       }
    }
 `;
+
+export const TOTAL_THIS_WEEK_ORDERS_PRICE = gql`
+   subscription totalThisWeekOrdersPrice($date: timestamptz!) {
+      orders_aggregate(where: { updated_at: { _gte: $date } }) {
+         aggregate {
+            sum {
+               order_price
+            }
+         }
+      }
+   }
+`;
+
+export const TOTAL_TWO_DATE_RANGES_PRICE = gql`
+   subscription totalThisWeekOrdersPrice($startDate: timestamptz!, $endDate: timestamptz!) {
+      orders_aggregate(where: { updated_at: { _gte: $startDate, _lte: $endDate } }) {
+         aggregate {
+            sum {
+               order_price
+            }
+         }
+      }
+   }
+`;
