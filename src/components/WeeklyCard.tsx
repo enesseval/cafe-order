@@ -26,20 +26,18 @@ function WeeklyCard() {
          const ordersMap: { [key: string]: number } = {};
 
          data.orders.forEach((order: Orders) => {
-            const date = order.updated_at.split("T")[0];
+            const date = order.created_at.split("T")[0];
 
             if (ordersMap[date]) ordersMap[date] += 1;
             else ordersMap[date] = 1;
          });
 
          const finalData = eachDayOfInterval({
-            start: new Date(),
-            end: getWeekStartDay(),
-         })
-            .reverse()
-            .map((date) => {
-               return { date: format(date, "yyyy-MM-dd"), count: ordersMap[format(date, "yyyy-MM-dd")] || 0 };
-            });
+            start: getWeekStartDay(),
+            end: new Date(),
+         }).map((date) => {
+            return { date: format(date, "yyyy-MM-dd"), count: ordersMap[format(date, "yyyy-MM-dd")] || 0 };
+         });
 
          setWeeklyOrders(finalData);
       }
@@ -55,7 +53,7 @@ function WeeklyCard() {
       );
 
    return (
-      <Card className="lg:max-w-md col-span-1">
+      <Card className="col-span-3 md:col-span-1">
          <CardHeader className="space-y-0 pb-2">
             <CardDescription>Bugün</CardDescription>
             <CardTitle className="text-4xl tabular-nums">
@@ -66,7 +64,7 @@ function WeeklyCard() {
          <CardContent>
             <ChartContainer config={{ count: { label: "Siparişler", color: "hsl(var(--chart-1))" } }}>
                <BarChart accessibilityLayer margin={{ left: -4, right: -4 }} data={weeklyOrders}>
-                  <Bar dataKey="count" fill="#876a59" radius={5} fillOpacity={0.6} activeBar={<Rectangle fillOpacity={0.8} />} />
+                  <Bar dataKey="count" fill="hsl(var(--chart-4))" radius={5} fillOpacity={0.6} activeBar={<Rectangle fillOpacity={0.8} />} />
                   <XAxis
                      dataKey="date"
                      tickLine={false}

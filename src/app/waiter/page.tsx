@@ -19,7 +19,7 @@ import {
 import { Orders } from "@/gql/graphql";
 import Loading from "@/components/Loading";
 import { Button } from "@/components/ui/button";
-import { renderLastActivity } from "@/lib/utils";
+import { renderLastActivity } from "../../components/RenderTSXs";
 import Unauthorized from "@/components/Unauthorized";
 import { useToast } from "@/components/ui/use-toast";
 import { GET_ALL_ORDERS, UPDATE_ORDER } from "@/queries/queries";

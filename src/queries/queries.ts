@@ -166,15 +166,15 @@ export const UPDATE_ORDER = gql`
 
 export const ORDER_WEEKLY_COUNT = gql`
    subscription orderWeeklyCount($date: timestamptz!) {
-      orders(where: { updated_at: { _gte: $date } }, order_by: { updated_at: asc }) {
-         updated_at
+      orders(where: { created_at: { _gte: $date } }, order_by: { created_at: asc }) {
+         created_at
       }
    }
 `;
 
 export const TOTAL_THIS_WEEK_ORDERS_PRICE = gql`
    subscription totalThisWeekOrdersPrice($date: timestamptz!) {
-      orders_aggregate(where: { updated_at: { _gte: $date } }) {
+      orders_aggregate(where: { created_at: { _gte: $date } }) {
          aggregate {
             sum {
                order_price
@@ -186,12 +186,32 @@ export const TOTAL_THIS_WEEK_ORDERS_PRICE = gql`
 
 export const TOTAL_TWO_DATE_RANGES_PRICE = gql`
    subscription totalThisWeekOrdersPrice($startDate: timestamptz!, $endDate: timestamptz!) {
-      orders_aggregate(where: { updated_at: { _gte: $startDate, _lte: $endDate } }) {
+      orders_aggregate(where: { created_at: { _gte: $startDate, _lte: $endDate } }) {
          aggregate {
             sum {
                order_price
             }
          }
+      }
+   }
+`;
+
+export const GET_TODAY_ORDERS = gql`
+   subscription getTodayOrders($date: timestamptz!) {
+      orders(where: { created_at: { _gte: $date } }) {
+         id
+         status
+         order_price
+      }
+   }
+`;
+
+export const GET_THREE_MONTH_ORDERS = gql`
+   subscription getTodayOrders($date: timestamptz!) {
+      orders(where: { created_at: { _gte: $date } }) {
+         id
+         created_at
+         order_price
       }
    }
 `;

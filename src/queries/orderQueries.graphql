@@ -76,3 +76,19 @@ subscription totalTwoDateRangesTotalPrice($startDate: timestamptz!, $endDate: ti
       }
    }
 }
+
+subscription getTodayOrders($date: timestamptz!) {
+   orders(where: { updated_at: { _gte: $date } }) {
+      id
+      status
+      order_price
+   }
+}
+
+subscription getTodayOrders($date: timestamptz!) {
+   orders(where: { updated_at: { _gte: $date } }) {
+      id
+      updated_at
+      order_price
+   }
+}

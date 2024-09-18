@@ -1,9 +1,9 @@
 import { ThemeProvider } from "next-themes";
 import { trTR } from "@clerk/localizations";
+import { ClerkProvider } from "@clerk/nextjs";
 
 import "./globals.css";
 import type { Metadata } from "next";
-import { ClerkProvider, useUser } from "@clerk/nextjs";
 import { Toaster } from "@/components/ui/toaster";
 import { Provider } from "@/components/graphql-provider";
 import { ShopbagProvider } from "@/components/context/ShopbagContext";
