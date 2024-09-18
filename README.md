@@ -91,4 +91,4 @@ npm run dev
 
 ## Admin
 
-![Menü](https://github.com/enesseval/cafe-order/blob/master/public/screenshots/dashboard.png)
+![Menü](https://github.com/enesseval/cafe-order/blob/master/public/screenshots/dashbooard.png)
